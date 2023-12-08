@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ComposeApp</string>
+    <string name="order_created">Order created</string>
+    <string name="recalculate">Recalculate</string>
 </resources>
