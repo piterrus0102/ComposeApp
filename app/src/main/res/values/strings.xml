@@ -2,4 +2,9 @@
     <string name="app_name">ComposeApp</string>
     <string name="order_created">Order created</string>
     <string name="recalculate">Recalculate</string>
+    <string name="calculate">Go to final price</string>
+    <string name="lbl_bb_not_accepted_title">We can\'t accept this device</string>
+    <string name="lbl_bb_not_accepted_message">The device does not meet our requirements</string>
+    <string name="ready_to_wipe">Ready to wipe</string>
+
 </resources>
