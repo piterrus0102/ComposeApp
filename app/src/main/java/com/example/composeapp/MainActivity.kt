@@ -19,41 +19,60 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composeapp.base.ui.StandardButton
-import com.example.composeapp.ui.theme.ComposeAppTheme
+import com.example.composeapp.ui.theme.PiterrusAppTheme
 import com.example.composeapp.ui.theme.myBoldTextStyle
 import com.example.composeapp.ui.theme.myRegularTextStyle
 import com.example.composeapp.ui.theme.mySmallTextStyle
 import com.example.composeapp.ui.theme.myTextStyle
-import com.example.composeapp.ui.theme.standardBottomRoundedCornerShape
-import com.example.composeapp.ui.theme.standardTopRoundedCornerShape
+import com.example.composeapp.ui.theme.standardRoundedCornerShape
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ComposeAppTheme {
+            PiterrusAppTheme {
                 Page()
             }
         }
     }
 
+}
+
+@Composable
+fun TopBar() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(64.dp)
+    ) {
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 100.dp,
+                ),
+            painter = painterResource(id = R.drawable.doom),
+            contentDescription = "Doom",
+            contentScale = ContentScale.Inside,
+        )
+    }
 }
 
 @Composable
@@ -66,22 +85,7 @@ fun Page() {
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp)
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = 100.dp,
-                    ),
-                painter = painterResource(id = R.drawable.doom),
-                contentDescription = "Doom",
-                contentScale = ContentScale.Inside,
-            )
-        }
+        TopBar()
         Column(
             modifier = Modifier
                 .background(Color(0xffe0eef5))
@@ -94,38 +98,47 @@ fun Page() {
                 text = "Poco M3",
                 style = myTextStyle.copy(color = MaterialTheme.colorScheme.secondary)
             )
+
             Spacer(modifier = Modifier.height(35.dp))
+
             val painter = painterResource(R.drawable.ic_hands_logo)
             Image(
-                painter = painter,
-                contentDescription = null,
+            painter = painter,
+            contentDescription = null,
                 Modifier
                     .width(218.dp)
                     .height(76.dp)
             )
+
             Spacer(modifier = Modifier.height(34.dp))
+
             Text(
-                text = LocalContext.current.getString(R.string.order_created),
+                text = stringResource(R.string.order_created),
                 style = myTextStyle.copy(fontSize = 21.sp, color = MaterialTheme.colorScheme.secondary)
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth(),
-            ) {
-                ElevatedCard(
-                    shape = standardTopRoundedCornerShape,
+
+            Spacer(modifier = Modifier.height(100.dp))
+
+        }
+        Layout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(start = 24.dp, end = 24.dp, bottom = 4.dp),
+            content = {
+                Card(
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                    shape = standardRoundedCornerShape,
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surfaceTint
                     ),
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(7.dp),
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .wrapContentHeight()
                             .fillMaxWidth()
                             .padding(vertical = 14.dp)
                     ) {
@@ -133,49 +146,37 @@ fun Page() {
                             text = "Final price",
                             style = myRegularTextStyle.copy(color = MaterialTheme.colorScheme.secondary)
                         )
+
                         Spacer(modifier = Modifier.height(7.dp))
+
                         Text(
                             text = "600.00 $",
                             style = myBoldTextStyle.copy(color = MaterialTheme.colorScheme.secondary)
                         )
+
                         Spacer(modifier = Modifier.height(24.dp))
+
+                        StandardButton(
+                            text = stringResource(id = R.string.recalculate),
+                            onClick = {
+                                Toast.makeText(context, "qwqe", Toast.LENGTH_SHORT).show()
+                            }
+                        )
                     }
                 }
-            }
-        }
-        Column(
-            modifier = Modifier
-                .padding(start = 24.dp, end = 24.dp, bottom = 4.dp)
-                .wrapContentHeight()
-                .fillMaxWidth(),
-        ) {
-            Card(
-                shape = standardBottomRoundedCornerShape,
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceTint
-                ),
-                modifier = Modifier
-                    .shadow(4.dp, standardBottomRoundedCornerShape)
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .fillMaxWidth()
-                        .padding(vertical = 14.dp)
-                ) {
-                    StandardButton(
-                        text = stringResource(id = R.string.recalculate),
-                        onClick = {
-                            Toast.makeText(context, "qwqe", Toast.LENGTH_SHORT).show()
-                        }
-                    )
+            },
+            measurePolicy = { measurables, constraints ->
+                val column = measurables[0].measure(constraints)
+                layout(column.width, column.height / 2){ //Change these per your needs
+                    column.placeRelative(IntOffset(0, -column.height / 2))
+
                 }
             }
-        }
+        )
+
+
         Spacer(modifier = Modifier.height(12.dp))
+
         Column(
             modifier = Modifier
                 .padding(horizontal = 24.dp)
@@ -198,7 +199,9 @@ fun Page() {
                 )
             }
         }
+
         Spacer(modifier = Modifier.height(14.dp))
+
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -214,7 +217,7 @@ fun Page() {
 @Preview(showSystemUi = true)
 @Composable
 fun GreetingPreview() {
-    ComposeAppTheme {
+    PiterrusAppTheme {
         Page()
     }
 }
