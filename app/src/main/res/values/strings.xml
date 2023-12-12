@@ -6,5 +6,10 @@
     <string name="lbl_bb_not_accepted_title">We can\'t accept this device</string>
     <string name="lbl_bb_not_accepted_message">The device does not meet our requirements</string>
     <string name="ready_to_wipe">Ready to wipe</string>
+    <string name="ready_to_start">Ready to start</string>
+    <string name="recording">Recording…</string>
+    <string name="play_record">Press to play</string>
+    <string name="stop_record">Press to stop</string>
+
 
 </resources>
