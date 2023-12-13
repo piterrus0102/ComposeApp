@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
@@ -15,7 +16,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.composeapp.base.ui.theme.PiterrusAppTheme
 import com.example.composeapp.components.DialogRecorder
 import com.example.composeapp.components.DialogRecorderViewModel
-import com.example.composeapp.components.PlayerState
 import com.example.composeapp.final_price.FinalPriceScreen
 import com.example.composeapp.stop.StartPriceScreen
 
@@ -42,15 +42,9 @@ class MainActivity : ComponentActivity() {
                             testName = "CameraMic",
                             onFailButtonClicked = {},
                             onPassButtonClicked = {},
-                            state = PlayerState.WaitingRecord,
+                            state = viewModel.dialogRecorderState.collectAsState().value,
                             onPlayerButtonClicked = {
-                                if (viewModel.mutableState.value == PlayerState.WaitingRecord) {
-                                    viewModel.mutableState.value = PlayerState.Recording
-                                } else if (viewModel.mutableState.value == PlayerState.WaitingPlaying) {
-                                    viewModel.mutableState.value = PlayerState.Playing
-                                } else {
-                                    viewModel.mutableState.value = PlayerState.WaitingRecord
-                                }
+                                viewModel.changeDialogRecorderState()
                             }
                         )
                     }
