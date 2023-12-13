@@ -10,6 +10,7 @@
     <string name="recording">Recording…</string>
     <string name="play_record">Press to play</string>
     <string name="stop_record">Press to stop</string>
+    <string name="enter_your_code">Enter your code</string>
 
 
 </resources>

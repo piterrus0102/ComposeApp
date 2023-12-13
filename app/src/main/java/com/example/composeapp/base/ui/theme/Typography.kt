@@ -81,3 +81,10 @@ val myBoldTextStyle = TextStyle(
     fontWeight = FontWeight(700),
     textAlign = TextAlign.Center,
 )
+
+val myExtraBoldTextStyle = TextStyle(
+    fontFamily = piterrusFontFamily,
+    fontSize = 65.sp,
+    fontWeight = FontWeight(700),
+    textAlign = TextAlign.Center,
+)

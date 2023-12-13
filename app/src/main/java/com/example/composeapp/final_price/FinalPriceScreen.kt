@@ -49,7 +49,16 @@ fun FinalPriceScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        TopBarWithLogo()
+        TopBarWithLogo(
+            modifier = Modifier
+            .fillMaxWidth()
+            .height(64.dp),
+            imageModifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 100.dp,
+                )
+        )
         Column(
             modifier = Modifier
                 .background(Color(0xffe0eef5))
