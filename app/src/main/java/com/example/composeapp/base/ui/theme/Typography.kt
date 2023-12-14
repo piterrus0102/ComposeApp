@@ -1,6 +1,5 @@
 package com.example.composeapp.base.ui.theme
 
-import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -17,31 +16,12 @@ private val semibold = Font(R.font.roboto_bold, FontWeight.W600)
 
 private val piterrusFontFamily = FontFamily(fonts = listOf(light, regular, medium, semibold))
 
-
-// Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    ),
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        color = Color.Red,
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
+val dialogRecorderStyle = TextStyle(
+    fontFamily = piterrusFontFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 22.sp,
+    lineHeight = 28.sp,
+    letterSpacing = 0.sp
 )
 
 val mySmallTextStyle = TextStyle(
@@ -87,4 +67,20 @@ val myExtraBoldTextStyle = TextStyle(
     fontSize = 65.sp,
     fontWeight = FontWeight(700),
     textAlign = TextAlign.Center,
+)
+
+val gray7C40016TextStyle = TextStyle(
+    fontSize = 16.sp,
+    lineHeight = 16.sp,
+    fontFamily = piterrusFontFamily,
+    fontWeight = FontWeight(400),
+    color = Color(0xFF7C7C7C)
+)
+
+val grayA240016TextStyle = TextStyle(
+    fontSize = 16.sp,
+    lineHeight = 16.sp,
+    fontFamily = piterrusFontFamily,
+    fontWeight = FontWeight(400),
+    color = Color(0xFFA2A2A2)
 )

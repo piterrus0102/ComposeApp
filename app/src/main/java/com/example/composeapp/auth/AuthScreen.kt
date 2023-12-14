@@ -16,13 +16,15 @@ import com.example.composeapp.components.PinComponent
 
 @Composable
 fun AuthScreen(
-    onPinEntered:(String) -> Unit
+    onPinEntered: (String) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         TopBarWithLogo(
-            modifier = Modifier.fillMaxWidth().padding(top = 67.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 67.dp),
             imageModifier = Modifier.padding(horizontal = 53.dp)
         )
         PinComponent(
@@ -39,7 +41,7 @@ fun AuthScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun GreetingPreview() {
+fun AuthScreen_Preview() {
     PiterrusAppTheme {
         AuthScreen(
             onPinEntered = {}

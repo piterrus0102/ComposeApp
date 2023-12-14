@@ -1,7 +1,6 @@
 package com.example.composeapp.base.ui
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -16,12 +15,14 @@ import com.example.composeapp.base.ui.theme.mainColor
 
 @Composable
 fun StandardButton(
+    modifier: Modifier = Modifier,
     text: String,
-    onClick: () -> Unit,
     painted: Boolean = false,
-    modifier: Modifier = Modifier.padding()
+    enabled: Boolean = true,
+    onClick: () -> Unit
 ) {
     OutlinedButton(
+        enabled = enabled,
         modifier = modifier,
         onClick = onClick,
         border = BorderStroke(
@@ -29,14 +30,13 @@ fun StandardButton(
             color = MaterialTheme.colorScheme.primary
         ),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if(painted) mainColor else Color.Transparent,
-            contentColor = if(painted) Color.White else mainColor
+            containerColor = if (painted) mainColor else Color.Transparent,
         ),
         shape = buttonRoundedCornerShape,
         content = {
             Text(
                 text = text,
-                style = buttonTextStyle
+                style = buttonTextStyle.copy(color = if (enabled && painted) Color.White else mainColor)
             )
         }
     )

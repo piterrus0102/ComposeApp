@@ -29,7 +29,7 @@ import com.example.composeapp.base.ui.theme.textColor
 fun PinComponent(
     titleStringId: Int,
     pinSize: Int,
-    onPinEntered:(String) -> Unit,
+    onPinEntered: (String) -> Unit,
     modifier: Modifier
 ) {
     Column(
@@ -45,13 +45,13 @@ fun PinComponent(
         Text(
             text = pin.ifEmpty { "•".repeat(pinSize) },
             style = myExtraBoldTextStyle.copy(
-                color = if(pin.isEmpty()) Color(0xff82848c) else Color.Black
+                color = if (pin.isEmpty()) Color(0xff82848c) else Color.Black
             )
         )
         NumberKeyboard(
             onButtonPressed = {
                 pin += it
-                if(pin.length == pinSize) {
+                if (pin.length == pinSize) {
                     onPinEntered.invoke(pin)
                 }
             }
@@ -156,7 +156,7 @@ fun KeyboardButton(
 
 @Preview(showSystemUi = true)
 @Composable
-fun GreetingPreview1() {
+fun PinComponent_Preview1() {
     PiterrusAppTheme {
         PinComponent(
             titleStringId = R.string.enter_your_code,

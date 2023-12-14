@@ -94,7 +94,7 @@ fun StartPriceScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun GreetingPreview() {
+fun StartPriceScreen_Preview() {
     PiterrusAppTheme {
         StartPriceScreen(
             onButtonClicked = {}

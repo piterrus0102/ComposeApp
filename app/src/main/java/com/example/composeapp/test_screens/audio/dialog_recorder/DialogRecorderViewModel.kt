@@ -1,4 +1,4 @@
-package com.example.composeapp.components
+package com.example.composeapp.test_screens.audio.dialog_recorder
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,12 +11,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class DialogRecorderViewModel: ViewModel() {
+class DialogRecorderViewModel : ViewModel() {
 
     private val playerMutableState = MutableStateFlow<PlayerState>(PlayerState.Waiting)
 
-    private val dialogRecorderMutableState = MutableStateFlow<DialogRecorderState>(DialogRecorderState.ReadyForRecording)
-    val dialogRecorderState = dialogRecorderMutableState.asStateFlow()
+    private val dialogRecorderMutableState =
+        MutableStateFlow<DialogRecorderState>(DialogRecorderState.ReadyForRecording)
+    private val dialogRecorderState = dialogRecorderMutableState.asStateFlow()
 
     private val recordHelper = RecordHelper { audioData ->
         playerMutableState.value = PlayerState.FinishRecording
@@ -30,25 +31,28 @@ class DialogRecorderViewModel: ViewModel() {
     }
 
     fun changeDialogRecorderState() {
-        when(dialogRecorderState.value) {
+        when (dialogRecorderState.value) {
             DialogRecorderState.ReadyForRecording -> {
                 playerMutableState.value = PlayerState.Recording
                 changePlayerState()
             }
+
             DialogRecorderState.ReadyForPlaying -> {
                 playerMutableState.value = PlayerState.Playing
                 changePlayerState()
             }
+
             DialogRecorderState.Playing -> {
                 playerMutableState.value = PlayerState.Paused
                 changePlayerState()
             }
+
             else -> {}
         }
     }
 
     private fun changePlayerState() {
-        when(playerMutableState.value) {
+        when (playerMutableState.value) {
             PlayerState.Waiting -> {}
             PlayerState.Recording -> {
                 viewModelScope.launch(Dispatchers.Main) {
@@ -56,19 +60,23 @@ class DialogRecorderViewModel: ViewModel() {
                 }
                 dialogRecorderMutableState.value = DialogRecorderState.Recording
             }
+
             PlayerState.FinishRecording -> {
                 dialogRecorderMutableState.value = DialogRecorderState.ReadyForPlaying
             }
+
             PlayerState.Playing -> {
                 viewModelScope.launch(Dispatchers.Main) {
                     audioPlayerHelper.resumePlayer()
                 }
                 dialogRecorderMutableState.value = DialogRecorderState.Playing
             }
+
             PlayerState.Paused -> {
                 audioPlayerHelper.pausePlayer()
                 dialogRecorderMutableState.value = DialogRecorderState.ReadyForPlaying
             }
+
             PlayerState.Stopped -> {
                 audioPlayerHelper.stopPlayer()
                 dialogRecorderMutableState.value = DialogRecorderState.ReadyForPlaying

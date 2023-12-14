@@ -28,7 +28,8 @@ class AudioPlayerHelper(val onEndAudioData: () -> Unit) {
             ) // Write all the data at once
             audioTrack?.write(audioData, 0, audioData.size)
             audioTrack?.notificationMarkerPosition = audioData.size
-            audioTrack?.setPlaybackPositionUpdateListener(object : AudioTrack.OnPlaybackPositionUpdateListener {
+            audioTrack?.setPlaybackPositionUpdateListener(object :
+                AudioTrack.OnPlaybackPositionUpdateListener {
                 override fun onPeriodicNotification(track: AudioTrack?) {}
 
                 override fun onMarkerReached(track: AudioTrack?) {
@@ -44,7 +45,7 @@ class AudioPlayerHelper(val onEndAudioData: () -> Unit) {
         }
     }
 
-    suspend fun resumePlayer() {
+    fun resumePlayer() {
         audioTrack?.play()
     }
 

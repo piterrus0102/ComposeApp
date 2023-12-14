@@ -1,4 +1,4 @@
-package com.example.composeapp.components
+package com.example.composeapp.test_screens.audio.dialog_recorder
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import com.example.composeapp.R
 import com.example.composeapp.base.ui.theme.PiterrusAppTheme
+import com.example.composeapp.base.ui.theme.dialogRecorderStyle
+import com.example.composeapp.base.ui.theme.failedColor
 import com.example.composeapp.base.ui.theme.mainColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -93,7 +94,7 @@ private fun TopBarTestName(testName: String) {
             .background(Color(0x7fd9d9dc))
     ) {
         Text(
-            style = MaterialTheme.typography.titleLarge,
+            style = dialogRecorderStyle,
             modifier = Modifier.padding(all = 20.dp),
             text = testName
         )
@@ -107,24 +108,27 @@ private fun MicPlayer(
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { result: Boolean ->
-        if(result) {
-            coroutineScope.launch(Dispatchers.Main) {
-                onPlayerButtonClicked()
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { result: Boolean ->
+            if (result) {
+                coroutineScope.launch(Dispatchers.Main) {
+                    onPlayerButtonClicked()
+                }
             }
         }
-    }
     val micTextStringId: Int
     val micImageId: Int
-    when(state) {
+    when (state) {
         DialogRecorderState.ReadyForRecording -> {
             micTextStringId = R.string.ready_to_start
             micImageId = R.drawable.ic_microphone_white
         }
+
         DialogRecorderState.Recording -> {
             micTextStringId = R.string.recording
             micImageId = R.drawable.ic_stop_50dp
         }
+
         DialogRecorderState.ReadyForPlaying -> {
             micTextStringId = R.string.play_record
             micImageId = R.drawable.ic_play_50dp
@@ -207,7 +211,7 @@ fun BottomBarButtons(
             .background(Color(0x7fd9d9dc))
     ) {
         Text(
-            style = MaterialTheme.typography.titleLarge.copy(color = Color.Red),
+            style = dialogRecorderStyle.copy(color = failedColor),
             modifier = Modifier
                 .padding(all = 20.dp)
                 .weight(1F)
@@ -216,7 +220,7 @@ fun BottomBarButtons(
             textAlign = TextAlign.Center
         )
         Text(
-            style = MaterialTheme.typography.titleLarge.copy(color = mainColor),
+            style = dialogRecorderStyle.copy(color = mainColor),
             modifier = Modifier
                 .padding(all = 20.dp)
                 .weight(1F)
@@ -229,7 +233,7 @@ fun BottomBarButtons(
 
 @Preview(showSystemUi = true)
 @Composable
-fun GreetingPreview() {
+fun DialogRecorder_Preview() {
     PiterrusAppTheme {
         DialogRecorder(
             testName = "CameraMic",

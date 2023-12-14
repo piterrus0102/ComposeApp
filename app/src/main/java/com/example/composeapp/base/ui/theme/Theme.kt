@@ -18,8 +18,8 @@ private val DarkColorScheme = darkColorScheme(
     primary = mainColor,
     secondary = textColor,
     tertiary = secondaryTextColor,
-    surfaceTint = Color.Black,
-    background = Color.Black
+    surfaceTint = Color.White,
+    background = Color.White
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -62,7 +62,6 @@ fun PiterrusAppTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
         content = content
     )
 }

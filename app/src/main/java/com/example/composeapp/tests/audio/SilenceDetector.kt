@@ -1,21 +1,25 @@
 package com.example.composeapp.tests.audio
 
+import kotlin.math.abs
+
 class SilenceDetector(
-    sampleRate: Int, time_sec: Float,
-    private val mThreshold: Int, private val mPeakCountThreshold: Int
+    sampleRate: Int,
+    timeSec: Float,
+    private val mThreshold: Int,
+    private val mPeakCountThreshold: Int
 ) {
     private val mSilentSamplesThreshold: Int
     private var mSilentSamples = 0
 
     init {
-        mSilentSamplesThreshold = (sampleRate * time_sec).toInt()
+        mSilentSamplesThreshold = (sampleRate * timeSec).toInt()
     }
 
     fun analyze(buff: ShortArray, size: Int): Boolean {
         var peaks = 0
         var s = 0
         while (size != s && peaks < mPeakCountThreshold) {
-            if (Math.abs(buff[s].toInt()) > mThreshold) ++peaks
+            if (abs(buff[s].toInt()) > mThreshold) ++peaks
             ++s
         }
         if (peaks >= mPeakCountThreshold) {

@@ -2,7 +2,6 @@
     <string name="app_name">ComposeApp</string>
     <string name="order_created">Order created</string>
     <string name="recalculate">Recalculate</string>
-    <string name="calculate">Go to final price</string>
     <string name="lbl_bb_not_accepted_title">We can\'t accept this device</string>
     <string name="lbl_bb_not_accepted_message">The device does not meet our requirements</string>
     <string name="ready_to_wipe">Ready to wipe</string>
@@ -11,6 +10,13 @@
     <string name="play_record">Press to play</string>
     <string name="stop_record">Press to stop</string>
     <string name="enter_your_code">Enter your code</string>
-
-
+    <string name="start">Start</string>
+    <string name="skip">Skip</string>
+    <string name="retry">Retry</string>
+    <string name="proceed">Proceed</string>
+    <string name="unplug_charger_battery_attention">Unplug the charger and press start</string>
+    <string name="real_discharge_level">Real discharge level: %s%%</string>
+    <string name="passed">Passed</string>
+    <string name="failed">Failed</string>
+    <string name="order_number">Order number</string>
 </resources>

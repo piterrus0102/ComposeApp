@@ -43,7 +43,7 @@ fun WipeScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun GreetingPreview() {
+fun WipeScreen_Preview() {
     PiterrusAppTheme {
         WipeScreen(
             onButtonClicked = {}

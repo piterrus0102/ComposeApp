@@ -5,6 +5,9 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import java.nio.ShortBuffer
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 class RecordHelper(
     val callback: (ShortArray) -> Unit
@@ -12,7 +15,7 @@ class RecordHelper(
 
     private var mAudioBuffer: ShortArray = shortArrayOf()
 
-    suspend fun startRecording() {
+    fun startRecording() {
         val bufferSize = AudioRecord.getMinBufferSize(
             44100,
             AudioFormat.CHANNEL_IN_MONO,
@@ -45,24 +48,16 @@ class RecordHelper(
                     continue
                 }
                 if (detector.analyze(mAudioBuffer, read)) {
-                    // mHandler.sendEmptyMessage(com.nsysgroup.nsystest.ui.views.AdvancedMicTest.sMSG_SILENCE)
                     continue
                 }
-                result.put(mAudioBuffer, 0, Math.min(read, result.remaining()))
+                result.put(mAudioBuffer, 0, min(read, result.remaining()))
                 if (read > result.remaining()) break else {
-                    var level = Math.abs(mAudioBuffer[0].toInt())
+                    var level = abs(mAudioBuffer[0].toInt())
                     var i = 1
                     while (read / 4 > i) {
-                        // sample only part of a buffer
-                        level = Math.max(level, Math.abs(mAudioBuffer[i].toInt()))
+                        level = max(level, abs(mAudioBuffer[i].toInt()))
                         ++i
                     }
-//                Message.obtain(
-//                    mHandler,
-//                    com.nsysgroup.nsystest.ui.views.AdvancedMicTest.sMSG_PROGRESS,
-//                    result.position(),
-//                    level
-//                ).sendToTarget()
                 }
             }
             record.stop()
