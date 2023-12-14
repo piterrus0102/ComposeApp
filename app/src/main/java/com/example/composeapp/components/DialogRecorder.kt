@@ -1,5 +1,9 @@
 package com.example.composeapp.components
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,19 +24,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import com.example.composeapp.R
 import com.example.composeapp.base.ui.theme.PiterrusAppTheme
 import com.example.composeapp.base.ui.theme.mainColor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -96,6 +105,15 @@ private fun MicPlayer(
     state: DialogRecorderState,
     onPlayerButtonClicked: () -> Unit
 ) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { result: Boolean ->
+        if(result) {
+            coroutineScope.launch(Dispatchers.Main) {
+                onPlayerButtonClicked()
+            }
+        }
+    }
     val micTextStringId: Int
     val micImageId: Int
     when(state) {
@@ -113,7 +131,7 @@ private fun MicPlayer(
         }
 
         DialogRecorderState.Playing -> {
-            micTextStringId = R.string.play_record
+            micTextStringId = R.string.stop_record
             micImageId = R.drawable.ic_stop_50dp
         }
     }
@@ -140,7 +158,15 @@ private fun MicPlayer(
                     .width(100.dp)
                     .height(100.dp)
                     .clickable {
-                        onPlayerButtonClicked.invoke()
+                        if (ActivityCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.RECORD_AUDIO
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            launcher.launch(Manifest.permission.RECORD_AUDIO)
+                        } else {
+                            onPlayerButtonClicked.invoke()
+                        }
                     }
 
             ) {
@@ -166,7 +192,6 @@ private fun MicPlayer(
 
         }
     }
-
 }
 
 @Composable
