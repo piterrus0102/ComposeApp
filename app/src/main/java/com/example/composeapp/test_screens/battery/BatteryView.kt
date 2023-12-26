@@ -33,10 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.composeapp.R
-import com.example.composeapp.base.data.OptionMeasurementType
-import com.example.composeapp.base.data.TestOption
-import com.example.composeapp.base.data.TestResultValue
-import com.example.composeapp.base.data.toMmSs
 import com.example.composeapp.base.ui.AttachLifecycleEvent
 import com.example.composeapp.base.ui.StandardButton
 import com.example.composeapp.base.ui.theme.PiterrusAppTheme
@@ -46,14 +42,17 @@ import com.example.composeapp.base.ui.theme.failedColor
 import com.example.composeapp.base.ui.theme.gray7C40016TextStyle
 import com.example.composeapp.base.ui.theme.grayA240016TextStyle
 import com.example.composeapp.base.ui.theme.passedColor
-import com.example.composeapp.tests.battery.battery_moon.android.GLSurface
+import com.example.composeapp.base.ui.toMmSs
+import com.example.feature_test_battery.battery_moon.android.GLSurface
+import com.example.test_core.data.OptionMeasurementType
+import com.example.test_core.data.TestOption
 import kotlinx.collections.immutable.toImmutableList
 
 
 private fun Context.setVibration(vibrate: Boolean) {
     val vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     if (vibrate) {
-        vibrator.vibrate(longArrayOf(0, 1000), 0);
+        vibrator.vibrate(longArrayOf(0, 1000), 0)
     } else {
         vibrator.cancel()
     }
@@ -132,8 +131,8 @@ private fun TestNotExecute(
                 var realDischargeLevelText = ""
                 var isPassed = false
                 when (batteryState.testResultValue) {
-                    TestResultValue.UNKNOWN -> {}
-                    TestResultValue.PASSED -> {
+                    com.example.test_core.data.TestResultValue.UNKNOWN -> {}
+                    com.example.test_core.data.TestResultValue.PASSED -> {
                         realDischargeLevelText = stringResource(
                             id = R.string.real_discharge_level,
                             batteryState.dischargeThreshold
@@ -141,7 +140,7 @@ private fun TestNotExecute(
                         isPassed = true
                     }
 
-                    TestResultValue.FAILED -> {
+                    com.example.test_core.data.TestResultValue.FAILED -> {
                         realDischargeLevelText = stringResource(
                             id = R.string.real_discharge_level,
                             batteryState.dischargeThreshold
@@ -149,12 +148,12 @@ private fun TestNotExecute(
                         isPassed = false
                     }
 
-                    TestResultValue.SKIPPED -> {
+                    com.example.test_core.data.TestResultValue.SKIPPED -> {
                         realDischargeLevelText = "Skipped"
                         isPassed = false
                     }
                 }
-                if (batteryState.testResultValue != TestResultValue.UNKNOWN) {
+                if (batteryState.testResultValue != com.example.test_core.data.TestResultValue.UNKNOWN) {
                     Spacer(modifier = Modifier.height(15.dp))
                     RealDischargeLevel(
                         text = realDischargeLevelText,
@@ -179,7 +178,7 @@ private fun TestNotExecute(
                 Spacer(modifier = Modifier.height(20.dp))
                 StandardButton(
                     text = stringResource(
-                        id = if (batteryState.testResultValue == TestResultValue.UNKNOWN) {
+                        id = if (batteryState.testResultValue == com.example.test_core.data.TestResultValue.UNKNOWN) {
                             R.string.start
                         } else {
                             R.string.retry
@@ -194,7 +193,7 @@ private fun TestNotExecute(
                 Spacer(modifier = Modifier.height(12.dp))
                 StandardButton(
                     text = stringResource(
-                        id = if (batteryState.testResultValue == TestResultValue.UNKNOWN) {
+                        id = if (batteryState.testResultValue == com.example.test_core.data.TestResultValue.UNKNOWN) {
                             R.string.skip
                         } else {
                             R.string.proceed
@@ -310,7 +309,7 @@ fun SimpleRowTest(
                 grayA240016TextStyle
             } else {
                 grayA240016TextStyle.copy(
-                    color = if (testOption.available) passedColor else failedColor
+                    color = if (testOption.available!!) passedColor else failedColor
                 )
             }
         )

@@ -18,7 +18,7 @@ fun BatteryScreen(
 ) {
     val viewModel: BatteryScreenViewModel = koinViewModel()
     // getting battery data regarding the charge in realtime
-    ChargeManager() { batteryLevel, isCharging ->
+    ChargeManager { batteryLevel, isCharging ->
         viewModel.updateBatteryIndicators(
             batteryLevel = batteryLevel,
             isCharging = isCharging

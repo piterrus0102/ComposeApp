@@ -16,4 +16,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "ComposeApp"
 include(":app")
- 
+include(":feature-test-battery")
+include(":test-core")
+include(":feature-test-audio")
+include(":feature-test-camera")

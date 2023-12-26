@@ -1,10 +1,7 @@
 package com.example.composeapp.test_screens.battery
 
 import androidx.lifecycle.ViewModel
-import com.example.composeapp.base.data.TestOption
-import com.example.composeapp.base.data.TestResultValue
-import com.example.composeapp.base.data.TestState
-import com.example.composeapp.tests.battery.BatteryLoad
+import com.example.feature_test_battery.BatteryLoad
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -20,7 +17,7 @@ class BatteryScreenViewModel(
     val batteryState = batteryMutableState.asStateFlow()
 
     // состояние теста
-    private val testMutableState = MutableStateFlow<TestState>(TestState.Initial)
+    private val testMutableState = MutableStateFlow<com.example.test_core.data.TestState>(com.example.test_core.data.TestState.Initial)
     private val testState = testMutableState.asStateFlow()
 
     private var test: BatteryLoad? = null
@@ -46,7 +43,7 @@ class BatteryScreenViewModel(
                         dischargeThreshold = realDischargeThreshold,
                     )
                 }
-                testMutableState.value = TestState.Completed(result)
+                testMutableState.value = com.example.test_core.data.TestState.Completed(result)
                 applyTestAction()
             },
         )
@@ -55,7 +52,7 @@ class BatteryScreenViewModel(
     // получение данных от батареи (уровень заряда и факт подключенного зарядного устройства)
     fun updateBatteryIndicators(batteryLevel: Int, isCharging: Boolean) {
         this.batteryLevel = batteryLevel
-        (test as? BatteryLoad)?.setEndBatteryLevel(batteryLevel)
+        test?.setEndBatteryLevel(batteryLevel)
         val newOptions = batteryRepository.getOptions()
             .map {
                 when (it.optionName) {
@@ -82,19 +79,19 @@ class BatteryScreenViewModel(
         applyTestAction()
     }
 
-    fun getResult(): TestResultValue {
+    fun getResult(): com.example.test_core.data.TestResultValue {
         return batteryState.value.testResultValue
     }
 
     fun intentToTestAction(isSkipped: Boolean) {
         if (isSkipped) {
-            testMutableState.value = TestState.HardStopped
+            testMutableState.value = com.example.test_core.data.TestState.HardStopped
             applyTestAction()
             return
         }
         when (batteryState.value.screenState) {
             is BatteryScreenState.NotExecuting -> {
-                testMutableState.value = TestState.Execute
+                testMutableState.value = com.example.test_core.data.TestState.Execute
                 applyTestAction()
             }
 
@@ -108,9 +105,9 @@ class BatteryScreenViewModel(
         test?.let { test ->
             when (testState) {
 
-                is TestState.Initial -> {}
+                is com.example.test_core.data.TestState.Initial -> {}
 
-                is TestState.Execute -> {
+                is com.example.test_core.data.TestState.Execute -> {
                     if (chargeState == ChargeState.NotCharging) {
                         if (!test.isRunning) {
                             test.setStartBatteryLevel(batteryLevel)
@@ -121,18 +118,18 @@ class BatteryScreenViewModel(
                     }
                 }
 
-                is TestState.HardStopped -> {
+                is com.example.test_core.data.TestState.HardStopped -> {
                     test.hardStop()
                 }
 
-                is TestState.Completed -> {
+                is com.example.test_core.data.TestState.Completed -> {
                     testActionToBatteryStateMutation(testState.result)
                 }
             }
         }
     }
 
-    private fun testActionToBatteryStateMutation(result: TestResultValue) {
+    private fun testActionToBatteryStateMutation(result: com.example.test_core.data.TestResultValue) {
         batteryMutableState.value = batteryState.value.copy(
             screenState = BatteryScreenState.NotExecuting,
             testResultValue = result
@@ -144,11 +141,11 @@ class BatteryScreenViewModel(
 data class BatteryState(
     val chargeState: ChargeState = ChargeState.Unknown,
     val screenState: BatteryScreenState = BatteryScreenState.NotExecuting,
-    val testResultValue: TestResultValue = TestResultValue.UNKNOWN,
+    val testResultValue: com.example.test_core.data.TestResultValue = com.example.test_core.data.TestResultValue.UNKNOWN,
     val batteryLevel: Int = 0,
     val dischargeThreshold: Int = 0,
     val testTime: Int = 0,
-    val options: ImmutableList<TestOption> = persistentListOf()
+    val options: ImmutableList<com.example.test_core.data.TestOption> = persistentListOf()
 ) {
     val readyForTest =
         chargeState == ChargeState.NotCharging && options.all { it.available != false }

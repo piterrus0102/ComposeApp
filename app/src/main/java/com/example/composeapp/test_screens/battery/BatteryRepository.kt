@@ -1,7 +1,6 @@
 package com.example.composeapp.test_screens.battery
 
-import com.example.composeapp.base.data.OptionMeasurementType
-import com.example.composeapp.base.data.TestOption
+import com.example.test_core.data.TestOption
 
 // domain layer imitation
 class BatteryRepository {
@@ -11,7 +10,7 @@ class BatteryRepository {
             optionName = "currentChargeLevel",
             optionDisplayName = "Current Charge Level",
             optionValue = 0,
-            optionMeasurement = OptionMeasurementType.PERCENT,
+            optionMeasurement = com.example.test_core.data.OptionMeasurementType.PERCENT,
             showedInList = true
 
         ),
@@ -19,7 +18,7 @@ class BatteryRepository {
             optionName = "minChargeLevel",
             optionDisplayName = "Min Charge Level",
             optionValue = 1,
-            optionMeasurement = OptionMeasurementType.PERCENT,
+            optionMeasurement = com.example.test_core.data.OptionMeasurementType.PERCENT,
             showedInList = true
 
         ),
@@ -27,14 +26,14 @@ class BatteryRepository {
             optionName = "testTime",
             optionDisplayName = "Test time",
             optionValue = 5,
-            optionMeasurement = OptionMeasurementType.TIME,
+            optionMeasurement = com.example.test_core.data.OptionMeasurementType.TIME,
             showedInList = true
         ),
         TestOption(
             optionName = "dischargeThreshold",
             optionDisplayName = "Discharge threshold",
             optionValue = 1,
-            optionMeasurement = OptionMeasurementType.PERCENT,
+            optionMeasurement = com.example.test_core.data.OptionMeasurementType.PERCENT,
             showedInList = true
         )
     )

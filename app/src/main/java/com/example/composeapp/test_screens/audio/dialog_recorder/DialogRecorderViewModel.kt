@@ -2,8 +2,8 @@ package com.example.composeapp.test_screens.audio.dialog_recorder
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composeapp.tests.audio.AudioPlayerHelper
-import com.example.composeapp.tests.audio.RecordHelper
+import com.example.feature_test_audio.AudioPlayerHelper
+import com.example.feature_test_audio.RecordHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,13 +19,13 @@ class DialogRecorderViewModel : ViewModel() {
         MutableStateFlow<DialogRecorderState>(DialogRecorderState.ReadyForRecording)
     private val dialogRecorderState = dialogRecorderMutableState.asStateFlow()
 
-    private val recordHelper = RecordHelper { audioData ->
+    private val recordHelper = com.example.feature_test_audio.RecordHelper { audioData ->
         playerMutableState.value = PlayerState.FinishRecording
         audioPlayerHelper.setData(audioData)
         changePlayerState()
     }
 
-    private val audioPlayerHelper = AudioPlayerHelper {
+    private val audioPlayerHelper = com.example.feature_test_audio.AudioPlayerHelper {
         playerMutableState.value = PlayerState.Stopped
         changePlayerState()
     }

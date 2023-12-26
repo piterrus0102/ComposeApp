@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composeapp.R
-import com.example.composeapp.base.data.TestResultValue
+import com.example.test_core.data.TestResultValue
 import com.example.composeapp.base.ui.TopBarWithLogo
 import com.example.composeapp.base.ui.theme.PiterrusAppTheme
 import com.example.composeapp.base.ui.theme.mySmallTextStyle
@@ -29,7 +29,7 @@ import com.example.composeapp.final_price.components.PriceCard
 
 @Composable
 fun FinalPriceView(
-    result: TestResultValue,
+    result: com.example.test_core.data.TestResultValue,
     onButtonClicked: () -> Unit
 ) {
     Column(
@@ -55,8 +55,8 @@ fun FinalPriceView(
         )
 
         val price = when (result) {
-            TestResultValue.PASSED -> "600.00 $"
-            TestResultValue.FAILED -> "200.00 $"
+            com.example.test_core.data.TestResultValue.PASSED -> "600.00 $"
+            com.example.test_core.data.TestResultValue.FAILED -> "200.00 $"
             else -> "400.00 $"
         }
         PriceCard(
@@ -89,7 +89,7 @@ fun FinalPriceView(
 fun FinalPriceView_Preview() {
     PiterrusAppTheme {
         FinalPriceView(
-            result = TestResultValue.PASSED,
+            result = com.example.test_core.data.TestResultValue.PASSED,
             onButtonClicked = {}
         )
     }

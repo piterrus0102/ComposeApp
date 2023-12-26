@@ -15,11 +15,13 @@ import kotlinx.coroutines.launch
 fun AttachLifecycleEvent(
     onResumeCallback: (() -> Unit)? = null,
     onStopCallback: (() -> Unit)? = null,
+    onDestroyCallback: (() -> Unit)? = null,
     onDisposeCallback: (() -> Unit)? = null,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val currentOnResumeCallback by rememberUpdatedState(onResumeCallback)
     val currentOnStopCallback by rememberUpdatedState(onStopCallback)
+    val currentOnDestroyCallback by rememberUpdatedState(onDestroyCallback)
     val currentOnDisposeCallback by rememberUpdatedState(onDisposeCallback)
     val scope = rememberCoroutineScope()
     DisposableEffect(lifecycleOwner) {
@@ -34,6 +36,12 @@ fun AttachLifecycleEvent(
                 Lifecycle.Event.ON_STOP -> {
                     scope.launch(Dispatchers.Main) {
                         currentOnStopCallback?.invoke()
+                    }
+                }
+
+                Lifecycle.Event.ON_DESTROY -> {
+                    scope.launch(Dispatchers.Main) {
+                        currentOnDestroyCallback?.invoke()
                     }
                 }
 
