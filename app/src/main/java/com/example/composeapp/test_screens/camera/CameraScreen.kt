@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavHostController
-import com.example.composeapp.base.ui.AttachLifecycleEvent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -16,8 +15,6 @@ fun CameraScreen(
     navController: NavHostController
 ) {
     val viewModel: CameraScreenViewModel = koinViewModel()
-    AttachLifecycleEvent()
-
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
     if (cameraPermissionState.status.isGranted) {
         CameraView(

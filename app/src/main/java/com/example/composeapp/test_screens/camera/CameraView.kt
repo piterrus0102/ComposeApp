@@ -3,7 +3,6 @@ package com.example.composeapp.test_screens.camera
 import android.app.Activity
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCapture.FLASH_MODE_OFF
@@ -31,7 +30,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,22 +42,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import coil.compose.rememberAsyncImagePainter
-import com.example.composeapp.R
 import com.example.composeapp.base.ui.AttachLifecycleEvent
 import com.example.composeapp.base.ui.YesNoDialog
-import com.example.composeapp.base.ui.theme.PiterrusAppTheme
+import com.example.composeapp.base.ui.getOutputDirectory
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 @Composable
@@ -75,10 +67,13 @@ fun CameraView(
             screenState.cameraTest?.let {
                 ExecuteTestView(
                     cameraTest = it,
-                    onPhotoCaptured = onPhotoCaptured
+                    onPhotoCaptured = onPhotoCaptured,
+                    onTestPassed = onTestPassed,
+                    onTestFailed = onTestFailed
                 )
             }
         }
+
         is CameraScreenState.PhotoCaptured -> {
             CapturedPhotoView(
                 onTestPassed = onTestPassed,
@@ -92,107 +87,110 @@ fun CameraView(
 @Composable
 private fun ExecuteTestView(
     cameraTest: ICameraTest,
-    onPhotoCaptured: (Uri) -> Unit
+    onPhotoCaptured: (Uri) -> Unit,
+    onTestPassed: () -> Unit,
+    onTestFailed: () -> Unit
 ) {
-    if(cameraTest is AutofocusBarcodeTest) {
-        AutofocusBarcodeView()
-    } else {
-        val context = LocalContext.current
-        val cameraExecutor = Executors.newSingleThreadExecutor()
-        val flash = cameraTest.options.firstOrNull { it.name == "flash" && it.isInvolved } != null
-        var photoCaptured by remember { mutableStateOf(Pair<Uri?, Boolean>(null, false)) }
-        AttachLifecycleEvent(
-            onDestroyCallback = {
-                cameraExecutor.shutdown()
-            }
+    if (cameraTest is AutofocusBarcodeTest) {
+        AutofocusBarcodeView(
+            onTestPassed = onTestPassed,
+            onTestFailed = onTestFailed
         )
-        if(photoCaptured.second) {
-            photoCaptured.first?.let {
-                YesNoDialog(
-                    title = "Have you seen the flash?",
-                    yesButtonTitle = "Yes",
-                    noButtonTitle = "No",
-                    onYes = {
-                        onPhotoCaptured.invoke(it)
-                    },
-                    onNo = {
-                        onPhotoCaptured.invoke(it)
-                    }
-                )
-            }
-        }
-        HardCameraView(
-            outputDirectory = context.getOutputDirectory(),
-            executor = cameraExecutor,
-            onImageCaptured = {
-                if(flash) {
-                    photoCaptured = Pair(it, true)
-                } else {
-                    onPhotoCaptured.invoke(it)
-                }
-            },
-            onError = { Log.e("kilo", "View error:", it) },
-            cameraId = if (cameraTest is BackCameraTest) {
-                CameraSelector.LENS_FACING_BACK
-            } else {
-                CameraSelector.LENS_FACING_FRONT
-            },
-            isFlashModeOn = flash
+    } else {
+        CameraView(
+            cameraTest = cameraTest,
+            onPhotoCaptured = onPhotoCaptured
         )
     }
 }
 
 @Composable
-fun AutofocusBarcodeView() {
-    var barcodeResult by remember {
-        mutableStateOf("")
-    }
-
-    if(barcodeResult.isNotEmpty()) {
+fun AutofocusBarcodeView(
+    onTestPassed: () -> Unit,
+    onTestFailed: () -> Unit,
+) {
+    val context = LocalContext.current
+    var barcodeResult by remember { mutableStateOf("") }
+    if (barcodeResult.isNotEmpty()) {
         YesNoDialog(
             title = barcodeResult,
             yesButtonTitle = "Yes",
             noButtonTitle = "No",
-            onYes = {
-
-            },
-            onNo = {
-
-            }
+            onYes = { onTestPassed.invoke() },
+            onNo = { onTestFailed.invoke() }
         )
     }
 
-    AndroidView(
-        modifier = Modifier,
-        factory = { context ->
-            CompoundBarcodeView(context).apply {
+    val decoratedBarcodeView = remember {
+        CompoundBarcodeView(context).apply {
             val capture = CaptureManager(context as Activity, this)
             capture.initializeFromIntent(context.intent, null)
+            this.resume()
             this.setStatusText("")
             capture.decode()
-            this.decodeContinuous(object : BarcodeCallback{
+            this.decodeContinuous(object : BarcodeCallback {
                 override fun barcodeResult(result: BarcodeResult?) {
                     barcodeResult = result?.result?.text ?: ""
                 }
 
                 override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {}
-
             })
-            this.resume()
-        } },
+        }
+    }
+
+    AndroidView(
+        modifier = Modifier,
+        factory = { decoratedBarcodeView },
+    )
+}
+
+@Composable
+fun CameraView(
+    cameraTest: ICameraTest,
+    onPhotoCaptured: (Uri) -> Unit
+) {
+    val context = LocalContext.current
+    val flash = cameraTest.options.firstOrNull { it.name == "flash" && it.isInvolved } != null
+    var photoCaptured by remember { mutableStateOf(Pair<Uri?, Boolean>(null, false)) }
+    if (photoCaptured.second) {
+        photoCaptured.first?.let {
+            YesNoDialog(
+                title = "Have you seen the flash?",
+                yesButtonTitle = "Yes",
+                noButtonTitle = "No",
+                onYes = { onPhotoCaptured.invoke(it) },
+                onNo = { onPhotoCaptured.invoke(it) }
+            )
+        }
+    }
+    HardCameraView(
+        outputDirectory = context.getOutputDirectory(),
+        onImageCaptured = {
+            if (flash) {
+                photoCaptured = Pair(it, true)
+            } else {
+                onPhotoCaptured.invoke(it)
+            }
+        },
+        onError = {},
+        cameraId = if (cameraTest is BackCameraTest) {
+            CameraSelector.LENS_FACING_BACK
+        } else {
+            CameraSelector.LENS_FACING_FRONT
+        },
+        isFlashModeOn = flash
     )
 }
 
 @Composable
 private fun HardCameraView(
     outputDirectory: File,
-    executor: Executor,
     onImageCaptured: (Uri) -> Unit,
     onError: (ImageCaptureException) -> Unit,
     cameraId: Int,
     isFlashModeOn: Boolean
 ) {
-    val lensFacing = remember { mutableIntStateOf(cameraId) }
+    val cameraExecutor = Executors.newSingleThreadExecutor()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -200,14 +198,13 @@ private fun HardCameraView(
     val previewView = remember { PreviewView(context) }
     val imageCapture: ImageCapture = remember {
         ImageCapture.Builder()
-            .setFlashMode(if(isFlashModeOn) FLASH_MODE_ON else FLASH_MODE_OFF)
+            .setFlashMode(if (isFlashModeOn) FLASH_MODE_ON else FLASH_MODE_OFF)
             .build()
     }
-    val cameraSelector = CameraSelector.Builder()
-        .requireLensFacing(lensFacing.intValue)
-        .build()
-
-    LaunchedEffect(lensFacing) {
+    val cameraSelector = remember { CameraSelector.Builder()
+        .requireLensFacing(cameraId)
+        .build() }
+    LaunchedEffect(Unit) {
         val cameraProvider = context.getCameraProvider()
         cameraProvider.unbindAll()
         cameraProvider.bindToLifecycle(
@@ -216,20 +213,29 @@ private fun HardCameraView(
             preview,
             imageCapture
         )
-
         preview.setSurfaceProvider(previewView.surfaceProvider)
     }
-    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
+
+    AttachLifecycleEvent(
+        onDisposeCallback = {
+            context.getCameraProvider().unbindAll() // this methods exists because of no call lifecycle callback on camera
+        }
+    )
+
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = Modifier.fillMaxSize()
+    ) {
         AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
 
         IconButton(
             modifier = Modifier.padding(bottom = 20.dp),
             onClick = {
-                takePhoto(
+                CameraAPI.takePhoto(
                     filenameFormat = "yyyy-MM-dd-HH-mm-ss-SSS",
                     imageCapture = imageCapture,
                     outputDirectory = outputDirectory,
-                    executor = executor,
+                    executor = cameraExecutor,
                     onImageCaptured = onImageCaptured,
                     onError = onError
                 )
@@ -305,66 +311,27 @@ private fun CapturedPhotoView(
     }
 }
 
-private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
-    suspendCoroutine { continuation ->
-        ProcessCameraProvider.getInstance(this).also { cameraProvider ->
-            cameraProvider.addListener(
-                {
-                    continuation.resume(cameraProvider.get())
-                },
-                ContextCompat.getMainExecutor(this)
-            )
-        }
-    }
-
-private fun takePhoto(
-    filenameFormat: String,
-    imageCapture: ImageCapture,
-    outputDirectory: File,
-    executor: Executor,
-    onImageCaptured: (Uri) -> Unit,
-    onError: (ImageCaptureException) -> Unit
-) {
-
-    val photoFile = File(
-        outputDirectory,
-        SimpleDateFormat(filenameFormat, Locale.US).format(System.currentTimeMillis()) + ".jpg"
-    )
-
-    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-
-    imageCapture.takePicture(outputOptions, executor, object : ImageCapture.OnImageSavedCallback {
-        override fun onError(exception: ImageCaptureException) {
-            onError(exception)
-        }
-
-        override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-            val savedUri = Uri.fromFile(photoFile)
-            onImageCaptured(savedUri)
-        }
-    })
-}
-
-private fun Context.getOutputDirectory(): File {
-    val mediaDir = externalMediaDirs.firstOrNull()?.let {
-        File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
-    }
-    return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
-}
-
-
-
-@androidx.compose.ui.tooling.preview.Preview
-@Composable
-fun CameraView_Preview() {
-    PiterrusAppTheme {
-        CameraView(
-            cameraState = CameraState(
-                screenState = CameraScreenState.Initial,
-            ),
-            onTestFailed = {},
-            onTestPassed = {},
-            onPhotoCaptured = {}
+private fun Context.getCameraProvider(): ProcessCameraProvider =
+    ProcessCameraProvider.getInstance(this).also { cameraProvider ->
+        cameraProvider.addListener({
+                cameraProvider.get()
+            },
+            ContextCompat.getMainExecutor(this)
         )
-    }
-}
+    }.get()
+
+
+//@androidx.compose.ui.tooling.preview.Preview
+//@Composable
+//fun CameraView_Preview() {
+//    PiterrusAppTheme {
+//        CameraView(
+//            cameraState = CameraState(
+//                screenState = CameraScreenState.Initial,
+//            ),
+//            onTestFailed = {},
+//            onTestPassed = {},
+//            onPhotoCaptured = {}
+//        )
+//    }
+//}

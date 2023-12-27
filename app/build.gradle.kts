@@ -86,7 +86,8 @@ dependencies {
 
     //module Camera
     // Barcode
-    implementation("com.journeyapps:zxing-android-embedded:3.6.0")
+    implementation("com.journeyapps:zxing-android-embedded:3.6.0") { isTransitive = false }
+    implementation("com.google.zxing:core:3.4.0")
     // CameraX core library using the camera2 implementation
     val cameraxVersion = "1.4.0-alpha03"
     // The following line is optional, as the core library is included indirectly by camera-camera2
