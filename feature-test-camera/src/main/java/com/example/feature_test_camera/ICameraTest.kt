@@ -1,4 +1,4 @@
-package com.example.composeapp.test_screens.camera
+package com.example.feature_test_camera
 
 import com.example.test_core.model.BaseTest
 

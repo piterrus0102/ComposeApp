@@ -1,4 +1,4 @@
-package com.example.composeapp.test_screens.camera
+package com.example.feature_test_camera
 
 import android.net.Uri
 import androidx.camera.core.ImageCapture

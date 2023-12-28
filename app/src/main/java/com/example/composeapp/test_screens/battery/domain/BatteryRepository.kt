@@ -1,4 +1,4 @@
-package com.example.composeapp.test_screens.battery
+package com.example.composeapp.test_screens.battery.domain
 
 import com.example.test_core.data.TestOption
 

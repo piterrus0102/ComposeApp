@@ -1,20 +1,17 @@
 package com.example.composeapp.test_screens.battery
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.os.bundleOf
-import androidx.navigation.NavHostController
 import com.example.composeapp.android_managers.ChargeManager
 import com.example.composeapp.base.ui.AttachLifecycleEvent
-import com.example.composeapp.navigation.Routes
+import com.example.test_core.data.TestResultValue
+import com.example.test_core.model.BaseTest
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun BatteryScreen(
-    navController: NavHostController
+    onFinishTests: (results: Map<out BaseTest, TestResultValue>) -> Unit
 ) {
     val viewModel: BatteryScreenViewModel = koinViewModel()
     // getting battery data regarding the charge in realtime
@@ -38,10 +35,7 @@ fun BatteryScreen(
             viewModel.intentToTestAction(isSkipped = true)
         },
         onFinishedButtonClicked = {
-            navController.findDestination(Routes.FinalPriceScreen.route)?.let {
-                val bundle = bundleOf("result" to viewModel.getResult())
-                navController.navigate(it.id, bundle)
-            }
+            onFinishTests.invoke(viewModel.testsResults)
         }
     )
 }

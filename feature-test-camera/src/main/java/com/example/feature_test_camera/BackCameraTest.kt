@@ -1,13 +1,10 @@
-package com.example.composeapp.test_screens.camera
+package com.example.feature_test_camera
 
-import androidx.compose.runtime.Stable
 import com.example.test_core.data.BaseTestOption
-import okhttp3.internal.immutableListOf
 
 class BackCameraTest : ICameraTest {
 
-    @Stable
-    override var options: List<BaseTestOption> = immutableListOf(
+    override var options: List<BaseTestOption> = listOf(
         BaseTestOption(
             name = "flash",
             value = null,
