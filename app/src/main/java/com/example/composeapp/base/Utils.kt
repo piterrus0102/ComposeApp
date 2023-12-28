@@ -1,4 +1,4 @@
-package com.example.composeapp.base.ui
+package com.example.composeapp.base
 
 import android.content.Context
 import com.example.composeapp.R

@@ -19,13 +19,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composeapp.R
-import com.example.test_core.data.TestResultValue
-import com.example.composeapp.base.ui.TopBarWithLogo
-import com.example.composeapp.base.ui.theme.PiterrusAppTheme
-import com.example.composeapp.base.ui.theme.mySmallTextStyle
-import com.example.composeapp.components.RowTextBetweenText
+import com.example.composeapp.base.ui_components.TopBarWithLogo
+import com.example.composeapp.base.theme.PiterrusAppTheme
+import com.example.composeapp.base.theme.mySmallTextStyle
+import com.example.composeapp.base.ui_components.RowTextBetweenText
 import com.example.composeapp.final_price.components.OrderCreatedFrame
 import com.example.composeapp.final_price.components.PriceCard
+import com.example.test_core.data.TestResultValue
 
 @Composable
 fun FinalPriceView(
@@ -89,7 +89,7 @@ fun FinalPriceView(
 fun FinalPriceView_Preview() {
     PiterrusAppTheme {
         FinalPriceView(
-            result = com.example.test_core.data.TestResultValue.PASSED,
+            result = TestResultValue.PASSED,
             onButtonClicked = {}
         )
     }

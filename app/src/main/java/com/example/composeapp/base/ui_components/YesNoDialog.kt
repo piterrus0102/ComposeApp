@@ -1,4 +1,4 @@
-package com.example.composeapp.base.ui
+package com.example.composeapp.base.ui_components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.composeapp.base.ui.theme.PiterrusAppTheme
-import com.example.composeapp.base.ui.theme.myTextStyle
+import com.example.composeapp.base.theme.PiterrusAppTheme
+import com.example.composeapp.base.theme.myTextStyle
 
 @Composable
 fun YesNoDialog(

@@ -1,8 +1,9 @@
 package com.example.composeapp.test_screens.camera
 
 import android.net.Uri
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
-import com.example.composeapp.base.ui.hasNext
+import com.example.composeapp.base.hasNext
 import com.example.test_core.data.TestResultValue
 import kotlinx.collections.immutable.immutableListOf
 import kotlinx.collections.immutable.toImmutableMap
@@ -75,7 +76,7 @@ data class CameraState(
 
 sealed class CameraAction {
     data class TestResultAction(val isPassed: Boolean) : CameraAction()
-    data class PhotoCapturedAction(val uri: Uri) : CameraAction()
+    data class PhotoCapturedAction(@Stable val uri: Uri) : CameraAction()
 }
 
 sealed class CameraScreenState {
@@ -83,11 +84,11 @@ sealed class CameraScreenState {
     data class Execute(
         val testIndex: Int,
         val testResultValue: TestResultValue = TestResultValue.UNKNOWN,
-        val cameraTest: com.example.feature_test_camera.ICameraTest? = null,
+        @Stable val cameraTest: com.example.feature_test_camera.ICameraTest? = null,
         val readyForTest: Boolean = false,
     ) : CameraScreenState()
 
-    data class PhotoCaptured(val uri: Uri) : CameraScreenState()
+    data class PhotoCaptured(@Stable val uri: Uri) : CameraScreenState()
 
     object FinishTests : CameraScreenState()
 }

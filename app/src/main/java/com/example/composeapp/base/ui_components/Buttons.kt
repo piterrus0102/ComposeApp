@@ -1,4 +1,4 @@
-package com.example.composeapp.base.ui
+package com.example.composeapp.base.ui_components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.ButtonDefaults
@@ -9,9 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.composeapp.base.ui.theme.buttonRoundedCornerShape
-import com.example.composeapp.base.ui.theme.buttonTextStyle
-import com.example.composeapp.base.ui.theme.mainColor
+import com.example.composeapp.base.theme.buttonRoundedCornerShape
+import com.example.composeapp.base.theme.buttonTextStyle
+import com.example.composeapp.base.theme.mainColor
 
 @Composable
 fun StandardButton(

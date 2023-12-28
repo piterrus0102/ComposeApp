@@ -18,10 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.example.composeapp.R
-import com.example.composeapp.base.ui.StandardButton
-import com.example.composeapp.base.ui.theme.myBoldTextStyle
-import com.example.composeapp.base.ui.theme.myRegularTextStyle
-import com.example.composeapp.base.ui.theme.standardRoundedCornerShape
+import com.example.composeapp.base.theme.myBoldTextStyle
+import com.example.composeapp.base.theme.myRegularTextStyle
+import com.example.composeapp.base.theme.standardRoundedCornerShape
+import com.example.composeapp.base.ui_components.StandardButton
 
 
 @Composable

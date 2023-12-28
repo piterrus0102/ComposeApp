@@ -1,4 +1,4 @@
-package com.example.composeapp.stop
+package com.example.composeapp.hard_stop
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,12 +23,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composeapp.R
-import com.example.composeapp.base.ui.StandardButton
-import com.example.composeapp.base.ui.TopBarWithLogo
-import com.example.composeapp.base.ui.theme.PiterrusAppTheme
-import com.example.composeapp.base.ui.theme.backgroundGrayColor
-import com.example.composeapp.base.ui.theme.mySmallTextStyle
-import com.example.composeapp.base.ui.theme.myTextStyle
+import com.example.composeapp.base.theme.PiterrusAppTheme
+import com.example.composeapp.base.theme.backgroundGrayColor
+import com.example.composeapp.base.theme.mySmallTextStyle
+import com.example.composeapp.base.theme.myTextStyle
+import com.example.composeapp.base.ui_components.StandardButton
+import com.example.composeapp.base.ui_components.TopBarWithLogo
 
 @Composable
 fun StartPriceScreen(

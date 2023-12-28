@@ -29,8 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
-import com.example.composeapp.base.ui.YesNoDialog
-import com.example.composeapp.base.ui.getOutputDirectory
+import com.example.composeapp.base.getOutputDirectory
+import com.example.composeapp.base.ui_components.YesNoDialog
 import com.example.feature_test_camera.BackCameraTest
 import com.example.feature_test_camera.ICameraTest
 import com.example.feature_test_camera.ui.DecoratedBarcodeView

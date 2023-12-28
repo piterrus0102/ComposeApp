@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composeapp.R
-import com.example.composeapp.base.ui.theme.myTextStyle
+import com.example.composeapp.base.theme.myTextStyle
 
 @Composable
 fun OrderCreatedFrame(
