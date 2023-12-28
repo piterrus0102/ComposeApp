@@ -11,9 +11,7 @@ plugins {
 subprojects {
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
-        }
+
 
         kotlinOptions {
             if (project.findProperty("composeCompilerReports") == "true") {
