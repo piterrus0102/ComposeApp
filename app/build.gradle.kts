@@ -59,10 +59,10 @@ dependencies {
     implementation(project(":feature-test-audio"))
     implementation(project(":test-core"))
 
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
@@ -81,18 +81,15 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6")
 
-    val koinVersion = "3.5.0"
-    implementation("io.insert-koin:koin-core:$koinVersion")
-    implementation("io.insert-koin:koin-android:$koinVersion")
-    implementation("io.insert-koin:koin-androidx-compose:3.4.1")
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 
     implementation(libs.google.accompanist)
 
     // Camera Api for getting CameraSelector
-    val cameraxVersion = "1.4.0-alpha03"
-    implementation("androidx.camera:camera-core:${cameraxVersion}")
-
+    implementation(libs.androidx.camera)
     // Coil
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation(libs.coil.kt)
 
 }
