@@ -1,4 +1,4 @@
-package com.example.composeapp.components
+package com.example.composeapp.base.ui_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.composeapp.base.ui.theme.myRegularTextStyle
+import com.example.composeapp.base.theme.myRegularTextStyle
 
 @Composable
 fun RowTextBetweenText(

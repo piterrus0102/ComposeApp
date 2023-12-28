@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
-import com.example.composeapp.base.ui.theme.PiterrusAppTheme
+import com.example.composeapp.base.theme.PiterrusAppTheme
 import com.example.composeapp.navigation.PiterrusNavHost
 import org.koin.androidx.compose.koinViewModel
 
@@ -12,7 +12,7 @@ import org.koin.androidx.compose.koinViewModel
  * Единственное Activity (точка входа в приложение)
  */
 
-class MainActivity : ComponentActivity() {
+class TestsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

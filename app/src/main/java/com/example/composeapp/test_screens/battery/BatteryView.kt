@@ -33,19 +33,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.composeapp.R
-import com.example.composeapp.base.ui.AttachLifecycleEvent
-import com.example.composeapp.base.ui.StandardButton
-import com.example.composeapp.base.ui.theme.PiterrusAppTheme
-import com.example.composeapp.base.ui.theme.backgroundErrorColor
-import com.example.composeapp.base.ui.theme.dividerColor
-import com.example.composeapp.base.ui.theme.failedColor
-import com.example.composeapp.base.ui.theme.gray7C40016TextStyle
-import com.example.composeapp.base.ui.theme.grayA240016TextStyle
-import com.example.composeapp.base.ui.theme.passedColor
-import com.example.composeapp.base.ui.toMmSs
+import com.example.composeapp.base.AttachLifecycleEvent
+import com.example.composeapp.base.theme.PiterrusAppTheme
+import com.example.composeapp.base.theme.backgroundErrorColor
+import com.example.composeapp.base.theme.dividerColor
+import com.example.composeapp.base.theme.failedColor
+import com.example.composeapp.base.theme.gray7C40016TextStyle
+import com.example.composeapp.base.theme.grayA240016TextStyle
+import com.example.composeapp.base.theme.passedColor
+import com.example.composeapp.base.toMmSs
+import com.example.composeapp.base.ui_components.StandardButton
 import com.example.feature_test_battery.battery_moon.android.GLSurface
 import com.example.test_core.data.OptionMeasurementType
 import com.example.test_core.data.TestOption
+import com.example.test_core.data.TestResultValue
 import kotlinx.collections.immutable.toImmutableList
 
 
@@ -178,7 +179,7 @@ private fun TestNotExecute(
                 Spacer(modifier = Modifier.height(20.dp))
                 StandardButton(
                     text = stringResource(
-                        id = if (batteryState.testResultValue == com.example.test_core.data.TestResultValue.UNKNOWN) {
+                        id = if (batteryState.testResultValue == TestResultValue.UNKNOWN) {
                             R.string.start
                         } else {
                             R.string.retry
@@ -193,7 +194,7 @@ private fun TestNotExecute(
                 Spacer(modifier = Modifier.height(12.dp))
                 StandardButton(
                     text = stringResource(
-                        id = if (batteryState.testResultValue == com.example.test_core.data.TestResultValue.UNKNOWN) {
+                        id = if (batteryState.testResultValue == TestResultValue.UNKNOWN) {
                             R.string.skip
                         } else {
                             R.string.proceed

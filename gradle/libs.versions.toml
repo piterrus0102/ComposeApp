@@ -1,0 +1,15 @@
+[versions]
+accompanist = "0.32.0"
+androidGradlePlugin = "8.2.0"
+kotlinVersion = "1.9.10"
+
+
+[libraries]
+google-accompanist = {group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist"}
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlinVersion"}
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinVersion"}

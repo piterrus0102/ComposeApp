@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composeapp.R
-import com.example.composeapp.base.ui.TopBarWithLogo
-import com.example.composeapp.base.ui.theme.PiterrusAppTheme
-import com.example.composeapp.components.PinComponent
+import com.example.composeapp.base.ui_components.TopBarWithLogo
+import com.example.composeapp.base.theme.PiterrusAppTheme
+import com.example.composeapp.base.ui_components.PinComponent
 
 @Composable
 fun AuthScreen(

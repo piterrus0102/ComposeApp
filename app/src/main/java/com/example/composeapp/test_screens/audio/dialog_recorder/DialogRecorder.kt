@@ -37,10 +37,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import com.example.composeapp.R
-import com.example.composeapp.base.ui.theme.PiterrusAppTheme
-import com.example.composeapp.base.ui.theme.dialogRecorderStyle
-import com.example.composeapp.base.ui.theme.failedColor
-import com.example.composeapp.base.ui.theme.mainColor
+import com.example.composeapp.base.theme.PiterrusAppTheme
+import com.example.composeapp.base.theme.dialogRecorderStyle
+import com.example.composeapp.base.theme.failedColor
+import com.example.composeapp.base.theme.mainColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
