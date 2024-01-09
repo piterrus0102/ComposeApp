@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import android.os.Looper
 import com.example.test_core.data.BaseTestOption
 import com.example.test_core.data.TestResultValue
+import com.example.test_core.data.TestState
 import java.io.File
 import java.io.FileFilter
 import java.lang.Integer.max
@@ -28,12 +29,11 @@ class BatteryLoad(
     )
 
     override var timerTicker: TimerTicker? = null
+    override var isRunning = false
 
-    private var testOptions: BatteryLoadOptions = BatteryLoadOptions()
+    override var testOptions: BatteryLoadOptions = BatteryLoadOptions()
     private var timer: CountDownTimer? = null
     private val mThreadList = Collections.synchronizedList(ArrayList<Thread>())
-
-    override var isRunning = false
 
     init {
         options.forEach {
@@ -72,14 +72,13 @@ class BatteryLoad(
         isRunning = true
         timer = object : CountDownTimer(testOptions.testTime * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                timerTicker?.onUpdateTimerInSeconds?.invoke(
-                    millisUntilFinished.toInt() / 1000
-                )
+                timerTicker?.onUpdateTimerInSeconds(millisUntilFinished.toInt() / 1000)
             }
 
             override fun onFinish() {
-                computeResult()
                 stop()
+                computeResult()
+                testMutableState.value = TestState.Completed
             }
 
         }
@@ -92,12 +91,13 @@ class BatteryLoad(
         stopThreads()
         timer?.cancel()
         timer = null
-
+        timerTicker = null
     }
 
     override fun hardStop() {
         stop()
         setTestResultValue(TestResultValue.SKIPPED)
+        testMutableState.value = TestState.Completed
     }
 
     private fun executeUnitOverload() {

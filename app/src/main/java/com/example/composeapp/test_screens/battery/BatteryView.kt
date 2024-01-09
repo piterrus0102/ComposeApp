@@ -329,7 +329,6 @@ fun BatteryView_Preview() {
             optionMeasurement = OptionMeasurementType.PERCENT,
             available = true,
             showedInList = true,
-            isInvolved = true
         ),
         BaseTestOption(
             name = "dischargeThreshold",
@@ -337,7 +336,6 @@ fun BatteryView_Preview() {
             value = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
             showedInList = true,
-            isInvolved = true
         ),
         BaseTestOption(
             name = "testTime:",
@@ -345,7 +343,6 @@ fun BatteryView_Preview() {
             value = 5,
             optionMeasurement = OptionMeasurementType.TIME,
             showedInList = true,
-            isInvolved = true
         ),
         BaseTestOption(
             name = "charging",
@@ -353,7 +350,6 @@ fun BatteryView_Preview() {
             value = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
             showedInList = true,
-            isInvolved = true
         ),
         BaseTestOption(
             name = "health:",
@@ -361,7 +357,6 @@ fun BatteryView_Preview() {
             value = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
             showedInList = true,
-            isInvolved = true
         ),
         BaseTestOption(
             name = "chargeCycles",
@@ -369,7 +364,6 @@ fun BatteryView_Preview() {
             value = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
             showedInList = false,
-            isInvolved = true
         ),
     )
     PiterrusAppTheme {

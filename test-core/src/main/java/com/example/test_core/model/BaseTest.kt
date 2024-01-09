@@ -2,6 +2,10 @@ package com.example.test_core.model
 
 import com.example.test_core.data.BaseTestOption
 import com.example.test_core.data.TestResultValue
+import com.example.test_core.data.TestState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 
 abstract class BaseTest {
     abstract fun execute()
@@ -17,5 +21,8 @@ abstract class BaseTest {
     }
 
     fun getTestResultValue(): TestResultValue = testResultValue
+
+    val testMutableState = MutableStateFlow<TestState>(TestState.Initial)
+    val testState = testMutableState.asStateFlow()
 
 }

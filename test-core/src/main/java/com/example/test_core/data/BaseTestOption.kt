@@ -3,7 +3,7 @@ package com.example.test_core.data
 data class BaseTestOption(
     val name: String,
     val value: Int?,
-    val isInvolved: Boolean,
+    val isInvolved: Boolean = false,
     val optionDisplayName: String,
     val optionMeasurement: OptionMeasurementType,
     val available: Boolean? = null,

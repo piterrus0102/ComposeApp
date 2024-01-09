@@ -7,4 +7,5 @@ abstract class IBatteryTest : BaseTest() {
     abstract fun setEndBatteryLevel(endBatteryLevel: Int)
     abstract fun getRealDischargeThreshold(): Int
     abstract var timerTicker: TimerTicker?
+    abstract var testOptions: BatteryLoad.BatteryLoadOptions
 }

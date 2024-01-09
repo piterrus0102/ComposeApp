@@ -1,14 +1,17 @@
 package com.example.composeapp.test_screens.battery
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.feature_test_battery.IBatteryTest
 import com.example.feature_test_battery.TimerTicker
 import com.example.test_core.data.TestResultValue
+import com.example.test_core.data.TestState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class BatteryScreenViewModel(private val test: IBatteryTest) : ViewModel() {
 
@@ -16,17 +19,18 @@ class BatteryScreenViewModel(private val test: IBatteryTest) : ViewModel() {
     private val batteryMutableState = MutableStateFlow(BatteryState())
     val batteryState = batteryMutableState.asStateFlow()
 
-    // состояние теста
-    private val testMutableState =
-        MutableStateFlow<com.example.test_core.data.TestState>(com.example.test_core.data.TestState.Initial)
-    private val testState = testMutableState.asStateFlow()
-
     private var batteryLevel: Int = 0
 
     init {
         batteryMutableState.value = batteryState.value.copy(
             options = test.options.toImmutableList(),
         )
+
+        viewModelScope.launch {
+            test.testState.collect {
+                applyTestAction()
+            }
+        }
     }
 
     // получение данных от батареи (уровень заряда и факт подключенного зарядного устройства)
@@ -34,20 +38,20 @@ class BatteryScreenViewModel(private val test: IBatteryTest) : ViewModel() {
         this.batteryLevel = batteryLevel
         test.setEndBatteryLevel(batteryLevel)
         val newOptions = batteryMutableState.value.options.map {
-                when (it.name) {
-                    "minChargeLevel" -> {
-                        it.copy(available = batteryLevel >= it.value!!)
-                    }
-
-                    "currentChargeLevel" -> {
-                        it.copy(value = batteryLevel)
-                    }
-
-                    else -> {
-                        it
-                    }
+            when (it.name) {
+                "minChargeLevel" -> {
+                    it.copy(available = batteryLevel >= it.value!!)
                 }
-            }.filter { it.showedInList }.toImmutableList()
+
+                "currentChargeLevel" -> {
+                    it.copy(value = batteryLevel)
+                }
+
+                else -> {
+                    it
+                }
+            }
+        }.filter { it.showedInList }.toImmutableList()
         batteryMutableState.value = batteryState.value.copy(
             batteryLevel = batteryLevel,
             chargeState = if (isCharging) ChargeState.Charging else ChargeState.NotCharging,
@@ -61,63 +65,59 @@ class BatteryScreenViewModel(private val test: IBatteryTest) : ViewModel() {
 
     fun intentToTestAction(isSkipped: Boolean) {
         if (isSkipped) {
-            testMutableState.value = com.example.test_core.data.TestState.HardStopped
-            applyTestAction()
+            test.testMutableState.value = TestState.HardStopped
             return
         }
         when (batteryState.value.screenState) {
             is BatteryScreenState.NotExecuting -> {
-                testMutableState.value = com.example.test_core.data.TestState.Execute
-                applyTestAction()
+                test.testMutableState.value = TestState.Execute
             }
 
-            is BatteryScreenState.Executing -> {}
+            else -> return
         }
     }
 
     private fun applyTestAction() {
         val chargeState = batteryState.value.chargeState
-        when (val testState = testState.value) {
-
-            is com.example.test_core.data.TestState.Initial -> {}
-
-            is com.example.test_core.data.TestState.Execute -> {
+        when (test.testState.value) {
+            is TestState.Execute -> {
                 if (chargeState == ChargeState.NotCharging) {
-                    if (!test.isRunning) {
-                        test.setStartBatteryLevel(batteryLevel)
-                        test.timerTicker = object: TimerTicker {
-                            override val onUpdateTimerInSeconds: (Int) -> Unit = {  tick ->
-                                batteryMutableState.value = batteryState.value.copy(
-                                    screenState = BatteryScreenState.Executing(
-                                        timeToCompletionInSeconds = tick,
-                                        enabledVibro = false,
-                                        enabled3D = true
-                                    )
+                    test.setStartBatteryLevel(batteryLevel)
+                    test.timerTicker = object : TimerTicker {
+                        override fun onUpdateTimerInSeconds(seconds: Int) {
+                            batteryMutableState.value = batteryState.value.copy(
+                                screenState = BatteryScreenState.Executing(
+                                    timeToCompletionInSeconds = seconds,
+                                    enabledVibro = test.testOptions.enableVibro,
+                                    enabled3D = test.testOptions.enable3d
                                 )
-                            }
-
+                            )
                         }
-                        test.execute()
-                    } else return
+
+                    }
+                    test.execute()
                 } else {
                     test.hardStop()
                 }
             }
 
-            is com.example.test_core.data.TestState.HardStopped -> {
+            is TestState.HardStopped -> {
                 test.hardStop()
             }
 
-            is com.example.test_core.data.TestState.Completed -> {
-                testActionToBatteryStateMutation(testState.result)
+            is TestState.Completed -> {
+                testActionToBatteryStateMutation(test.getTestResultValue())
             }
+
+            else -> return
         }
     }
 
     private fun testActionToBatteryStateMutation(result: TestResultValue) {
         testsResults[test] = result
         batteryMutableState.value = batteryState.value.copy(
-            screenState = BatteryScreenState.NotExecuting, testResultValue = result
+            screenState = BatteryScreenState.NotExecuting,
+            testResultValue = result
         )
     }
 
@@ -137,8 +137,10 @@ data class BatteryState(
 }
 
 sealed class BatteryScreenState {
-    object NotExecuting : BatteryScreenState()
+    data object NotExecuting : BatteryScreenState()
     data class Executing(
-        val timeToCompletionInSeconds: Int, val enabledVibro: Boolean, val enabled3D: Boolean
+        val timeToCompletionInSeconds: Int,
+        val enabledVibro: Boolean,
+        val enabled3D: Boolean
     ) : BatteryScreenState()
 }
