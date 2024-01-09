@@ -3,9 +3,7 @@ package com.example.feature_test_battery
 import android.os.CountDownTimer
 import android.os.Looper
 import com.example.test_core.data.BaseTestOption
-import com.example.test_core.data.TestOption
 import com.example.test_core.data.TestResultValue
-import com.example.test_core.model.BaseTest
 import java.io.File
 import java.io.FileFilter
 import java.lang.Integer.max
@@ -16,10 +14,8 @@ import kotlin.math.abs
 
 
 class BatteryLoad(
-    options: List<TestOption>,
-    private val onUpdateTimerInSeconds: (Int, enabledVibro: Boolean, enable3d: Boolean) -> Unit,
-    private val onCompleted: (TestResultValue, realDischarge: Int?) -> Unit,
-) : BaseTest {
+    override var options: List<BaseTestOption>,
+) : IBatteryTest() {
 
     data class BatteryLoadOptions(
         val startBatteryLevel: Int = 0,
@@ -31,7 +27,7 @@ class BatteryLoad(
         val endBatteryLevel: Int = 0,
     )
 
-    override var options: List<BaseTestOption> = listOf()
+    override var timerTicker: TimerTicker? = null
 
     private var testOptions: BatteryLoadOptions = BatteryLoadOptions()
     private var timer: CountDownTimer? = null
@@ -41,44 +37,49 @@ class BatteryLoad(
 
     init {
         options.forEach {
-            if (it.optionName == "testTime") {
-                testOptions = testOptions.copy(testTime = it.optionValue)
+            if (it.name == "testTime") {
+                testOptions = testOptions.copy(testTime = it.value!!)
             }
-            if (it.optionName == "dischargeThreshold") {
-                testOptions = testOptions.copy(dischargeThreshold = it.optionValue)
+            if (it.name == "dischargeThreshold") {
+                testOptions = testOptions.copy(dischargeThreshold = it.value!!)
             }
         }
     }
 
-    fun setStartBatteryLevel(startBatteryLevel: Int) {
+    override fun setStartBatteryLevel(startBatteryLevel: Int) {
         testOptions = testOptions.copy(startBatteryLevel = startBatteryLevel)
     }
 
-    fun setEndBatteryLevel(endBatteryLevel: Int) {
+    override fun setEndBatteryLevel(endBatteryLevel: Int) {
         testOptions = testOptions.copy(endBatteryLevel = endBatteryLevel)
     }
 
-    private fun computeResult(): TestResultValue {
-        return if (abs(testOptions.startBatteryLevel - testOptions.endBatteryLevel) <= testOptions.dischargeThreshold) TestResultValue.PASSED else TestResultValue.FAILED
+    override fun getRealDischargeThreshold(): Int {
+        return abs(testOptions.startBatteryLevel - testOptions.endBatteryLevel)
+    }
+
+    private fun computeResult() {
+        setTestResultValue(
+            if (getRealDischargeThreshold() <= testOptions.dischargeThreshold) {
+                TestResultValue.PASSED
+            } else {
+                TestResultValue.FAILED
+            }
+        )
     }
 
     override fun execute() {
         isRunning = true
         timer = object : CountDownTimer(testOptions.testTime * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                onUpdateTimerInSeconds.invoke(
-                    millisUntilFinished.toInt() / 1000,
-                    testOptions.enableVibro,
-                    testOptions.enable3d
+                timerTicker?.onUpdateTimerInSeconds?.invoke(
+                    millisUntilFinished.toInt() / 1000
                 )
             }
 
             override fun onFinish() {
+                computeResult()
                 stop()
-                onCompleted.invoke(
-                    computeResult(),
-                    abs(testOptions.startBatteryLevel - testOptions.endBatteryLevel)
-                )
             }
 
         }
@@ -96,7 +97,7 @@ class BatteryLoad(
 
     override fun hardStop() {
         stop()
-        onCompleted.invoke(TestResultValue.SKIPPED, null)
+        setTestResultValue(TestResultValue.SKIPPED)
     }
 
     private fun executeUnitOverload() {
@@ -170,5 +171,4 @@ class BatteryLoad(
             max(1, Runtime.getRuntime().availableProcessors())
         }
     }
-
 }

@@ -98,5 +98,6 @@ dependencies {
     //Dagger 2
     implementation(libs.dagger.core)
     kapt(libs.dagger.compiler)
+    implementation(kotlin("reflect"))
 
 }

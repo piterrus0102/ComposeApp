@@ -2,7 +2,7 @@ package com.example.feature_test_camera
 
 import com.example.test_core.data.BaseTestOption
 
-class AutofocusBarcodeTest : ICameraTest {
+class AutofocusBarcodeTest : ICameraTest() {
     override fun execute() {}
     override fun stop() {}
     override fun hardStop() {}

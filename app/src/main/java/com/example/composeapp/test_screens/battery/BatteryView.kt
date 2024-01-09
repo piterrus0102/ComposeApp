@@ -44,8 +44,8 @@ import com.example.composeapp.base.theme.passedColor
 import com.example.composeapp.base.toMmSs
 import com.example.composeapp.base.ui_components.StandardButton
 import com.example.feature_test_battery.battery_moon.android.GLSurface
+import com.example.test_core.data.BaseTestOption
 import com.example.test_core.data.OptionMeasurementType
-import com.example.test_core.data.TestOption
 import com.example.test_core.data.TestResultValue
 import kotlinx.collections.immutable.toImmutableList
 
@@ -288,7 +288,7 @@ private fun RealDischargeLevel(
 
 @Composable
 fun SimpleRowTest(
-    testOption: TestOption
+    testOption: BaseTestOption
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -301,8 +301,9 @@ fun SimpleRowTest(
         )
         Text(
             text = when (testOption.optionMeasurement) {
-                OptionMeasurementType.PERCENT -> "${testOption.optionValue}%"
-                OptionMeasurementType.TIME -> testOption.optionValue.toMmSs()
+                OptionMeasurementType.PERCENT -> "${testOption.value}%"
+                OptionMeasurementType.TIME -> testOption.value?.toMmSs() ?: ""
+                else -> ""
             },
             modifier = Modifier.weight(1F),
             textAlign = TextAlign.End,
@@ -321,48 +322,54 @@ fun SimpleRowTest(
 @Composable
 fun BatteryView_Preview() {
     val options = listOf(
-        TestOption(
-            optionName = "batteryLevel:",
+        BaseTestOption(
+            name = "batteryLevel:",
             optionDisplayName = "Battery level",
-            optionValue = 50,
+            value = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
             available = true,
-            showedInList = true
+            showedInList = true,
+            isInvolved = true
         ),
-        TestOption(
-            optionName = "dischargeThreshold",
+        BaseTestOption(
+            name = "dischargeThreshold",
             optionDisplayName = "Discharge threshold",
-            optionValue = 50,
+            value = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
-            showedInList = true
+            showedInList = true,
+            isInvolved = true
         ),
-        TestOption(
-            optionName = "testTime:",
+        BaseTestOption(
+            name = "testTime:",
             optionDisplayName = "Test time",
-            optionValue = 5,
+            value = 5,
             optionMeasurement = OptionMeasurementType.TIME,
-            showedInList = true
+            showedInList = true,
+            isInvolved = true
         ),
-        TestOption(
-            optionName = "charging",
+        BaseTestOption(
+            name = "charging",
             optionDisplayName = "Charging",
-            optionValue = 50,
+            value = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
-            showedInList = true
+            showedInList = true,
+            isInvolved = true
         ),
-        TestOption(
-            optionName = "health:",
+        BaseTestOption(
+            name = "health:",
             optionDisplayName = "Health",
-            optionValue = 50,
+            value = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
-            showedInList = true
+            showedInList = true,
+            isInvolved = true
         ),
-        TestOption(
-            optionName = "chargeCycles",
+        BaseTestOption(
+            name = "chargeCycles",
             optionDisplayName = "Charge cycles",
-            optionValue = 50,
+            value = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
-            showedInList = false
+            showedInList = false,
+            isInvolved = true
         ),
     )
     PiterrusAppTheme {

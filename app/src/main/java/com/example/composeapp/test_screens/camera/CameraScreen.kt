@@ -3,18 +3,20 @@ package com.example.composeapp.test_screens.camera
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import com.example.feature_test_camera.ICameraTest
 import com.example.test_core.data.TestResultValue
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraScreen(
-    onFinishTests: (results: Map<com.example.feature_test_camera.ICameraTest, TestResultValue>) -> Unit
+    tests: List<ICameraTest>,
+    onFinishTests: (results: Map<ICameraTest, TestResultValue>) -> Unit
 ) {
-    val viewModel: CameraScreenViewModel = koinViewModel()
+    val viewModel: CameraScreenViewModel = remember { CameraScreenViewModel(tests) }
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
     if (cameraPermissionState.status.isGranted) {
         CameraView(

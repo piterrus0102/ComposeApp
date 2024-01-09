@@ -4,25 +4,21 @@ import android.net.Uri
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import com.example.composeapp.base.hasNext
+import com.example.feature_test_camera.ICameraTest
 import com.example.test_core.data.TestResultValue
-import kotlinx.collections.immutable.immutableListOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class CameraScreenViewModel : ViewModel() {
+class CameraScreenViewModel(private val testsList: List<ICameraTest>) : ViewModel() {
 
     // состояние экрана, сопровождающего тест
     private val cameraMutableState = MutableStateFlow(CameraState())
     val cameraState = cameraMutableState.asStateFlow()
 
-    private val testsList = immutableListOf<com.example.feature_test_camera.ICameraTest>(
-        com.example.feature_test_camera.BackCameraTest(),
-        com.example.feature_test_camera.FrontCameraTest(),
-        com.example.feature_test_camera.AutofocusBarcodeTest()
-    )
+
     private var testsListIndex = 0
-    private val testsResults = mutableMapOf<com.example.feature_test_camera.ICameraTest, TestResultValue>()
+    private val testsResults = mutableMapOf<ICameraTest, TestResultValue>()
     fun getTestsResults() = testsResults.toImmutableMap()
 
 
