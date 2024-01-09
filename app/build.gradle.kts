@@ -44,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
     packaging {
         resources {
@@ -54,42 +54,49 @@ android {
 }
 
 dependencies {
+    //AppModules
     implementation(project(":feature-test-camera"))
     implementation(project(":feature-test-battery"))
     implementation(project(":feature-test-audio"))
     implementation(project(":test-core"))
-
+    //ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-
-    implementation("androidx.navigation:navigation-compose:2.7.6")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6")
-
+    //Compose
+    implementation(libs.compose.ui)
+    implementation(libs.compose.graphics)
+    implementation(libs.compose.preview)
+    debugImplementation(libs.compose.tooling)
+    debugImplementation(libs.compose.test.manifest)
+    androidTestImplementation(libs.compose.test.junit4)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(platform(libs.compose.bom))
+    //ComposeActivity
+    implementation(libs.compose.activity)
+    //Navigation
+    implementation(libs.compose.navigation)
+    //Core Ktx
+    implementation(libs.core.ktx)
+    //Immutable Collections
+    implementation(libs.immutable.collections)
+    //Material 3
+    implementation(libs.material3)
+    //JUnit4 + Espresso
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.extensions)
+    androidTestImplementation(libs.espresso.core)
+    //Koin
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
-
+    //Accompanist
     implementation(libs.google.accompanist)
-
     // Camera Api for getting CameraSelector
     implementation(libs.androidx.camera)
     // Coil
     implementation(libs.coil.kt)
+    //Dagger 2
+    implementation(libs.dagger.core)
+    kapt(libs.dagger.compiler)
 
 }

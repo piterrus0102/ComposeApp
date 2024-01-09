@@ -317,7 +317,7 @@ fun SimpleRowTest(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, device = "id:pixel_6_pro")
 @Composable
 fun BatteryView_Preview() {
     val options = listOf(

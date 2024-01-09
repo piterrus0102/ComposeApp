@@ -6,6 +6,16 @@ lifecycle = "2.6.2"
 cameraX = "1.4.0-alpha03"
 coil = "2.4.0"
 koin = "3.5.0"
+compose = "1.5.3"
+activityCompose = "1.8.2"
+navigationCompose = "2.7.6"
+coreKtx = "1.12.0"
+immutableCollections = "0.3.6"
+junit = "4.13.2"
+junitExtensions = "1.1.5"
+espresso = "3.5.1"
+composeBom = "2023.03.00"
+dagger = "2.48.1"
 
 [libraries]
 google-accompanist = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
@@ -16,6 +26,23 @@ coil-kt = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+compose-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+immutable-collections = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "immutableCollections" }
+material3 = { group = "androidx.compose.material3", name = "material3" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+junit-extensions = { group = "androidx.test.ext", name = "junit", version.ref = "junitExtensions" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+dagger-core = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

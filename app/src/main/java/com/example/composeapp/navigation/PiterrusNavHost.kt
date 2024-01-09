@@ -18,7 +18,7 @@ fun PiterrusNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Routes.CameraTestScreen.route
+        startDestination = Routes.BatteryTestScreen.route
     ) {
         composable(Routes.CameraTestScreen.route) {
             CameraScreen(
@@ -41,9 +41,9 @@ fun PiterrusNavHost(
                 testResultValue = viewModel.results.entries.first { it.key is BatteryLoad }.value,
                 onButtonClicked = {
                     val navOptions = NavOptions.Builder()
-                        .setPopUpTo(route = Routes.CameraTestScreen.route, inclusive = true)
+                        .setPopUpTo(route = navController.graph.startDestinationRoute, inclusive = true)
                         .build()
-                    navController.navigate(Routes.CameraTestScreen.route, navOptions)
+                    navController.navigate(navController.graph.startDestinationRoute!!, navOptions)
                 }
             )
         }

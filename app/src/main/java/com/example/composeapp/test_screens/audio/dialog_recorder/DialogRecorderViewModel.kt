@@ -2,15 +2,11 @@ package com.example.composeapp.test_screens.audio.dialog_recorder
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.feature_test_audio.AudioPlayerHelper
-import com.example.feature_test_audio.RecordHelper
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-@HiltViewModel
 class DialogRecorderViewModel : ViewModel() {
 
     private val playerMutableState = MutableStateFlow<PlayerState>(PlayerState.Waiting)
