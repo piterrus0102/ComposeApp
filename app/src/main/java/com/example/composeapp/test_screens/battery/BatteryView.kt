@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.composeapp.R
 import com.example.composeapp.base.AttachLifecycleEvent
+import com.example.composeapp.base.UITestOption
 import com.example.composeapp.base.theme.PiterrusAppTheme
 import com.example.composeapp.base.theme.backgroundErrorColor
 import com.example.composeapp.base.theme.dividerColor
@@ -44,8 +45,8 @@ import com.example.composeapp.base.theme.passedColor
 import com.example.composeapp.base.toMmSs
 import com.example.composeapp.base.ui_components.StandardButton
 import com.example.feature_test_battery.battery_moon.android.GLSurface
-import com.example.test_core.data.BaseTestOption
 import com.example.test_core.data.OptionMeasurementType
+import com.example.test_core.data.TestOptionType
 import com.example.test_core.data.TestResultValue
 import kotlinx.collections.immutable.toImmutableList
 
@@ -288,7 +289,7 @@ private fun RealDischargeLevel(
 
 @Composable
 fun SimpleRowTest(
-    testOption: BaseTestOption
+    testOption: UITestOption
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -301,8 +302,8 @@ fun SimpleRowTest(
         )
         Text(
             text = when (testOption.optionMeasurement) {
-                OptionMeasurementType.PERCENT -> "${testOption.value}%"
-                OptionMeasurementType.TIME -> testOption.value?.toMmSs() ?: ""
+                OptionMeasurementType.PERCENT -> "${testOption.optionDisplayValue}%"
+                OptionMeasurementType.TIME -> testOption.optionDisplayValue.toMmSs()
                 else -> ""
             },
             modifier = Modifier.weight(1F),
@@ -311,7 +312,7 @@ fun SimpleRowTest(
                 grayA240016TextStyle
             } else {
                 grayA240016TextStyle.copy(
-                    color = if (testOption.available!!) passedColor else failedColor
+                    color = if (testOption.available) passedColor else failedColor
                 )
             }
         )
@@ -322,48 +323,48 @@ fun SimpleRowTest(
 @Composable
 fun BatteryView_Preview() {
     val options = listOf(
-        BaseTestOption(
-            name = "batteryLevel:",
+        UITestOption(
             optionDisplayName = "Battery level",
-            value = 50,
+            optionDisplayValue = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
-            available = true,
+            available = false,
             showedInList = true,
+            testOptionType = TestOptionType.UNDEFINED
         ),
-        BaseTestOption(
-            name = "dischargeThreshold",
+        UITestOption(
             optionDisplayName = "Discharge threshold",
-            value = 50,
+            optionDisplayValue = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
             showedInList = true,
+            testOptionType = TestOptionType.UNDEFINED
         ),
-        BaseTestOption(
-            name = "testTime:",
+        UITestOption(
             optionDisplayName = "Test time",
-            value = 5,
+            optionDisplayValue = 5,
             optionMeasurement = OptionMeasurementType.TIME,
             showedInList = true,
+            testOptionType = TestOptionType.UNDEFINED
         ),
-        BaseTestOption(
-            name = "charging",
+        UITestOption(
             optionDisplayName = "Charging",
-            value = 50,
+            optionDisplayValue = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
             showedInList = true,
+            testOptionType = TestOptionType.UNDEFINED
         ),
-        BaseTestOption(
-            name = "health:",
+        UITestOption(
             optionDisplayName = "Health",
-            value = 50,
+            optionDisplayValue = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
             showedInList = true,
+            testOptionType = TestOptionType.UNDEFINED
         ),
-        BaseTestOption(
-            name = "chargeCycles",
+        UITestOption(
             optionDisplayName = "Charge cycles",
-            value = 50,
+            optionDisplayValue = 50,
             optionMeasurement = OptionMeasurementType.PERCENT,
             showedInList = false,
+            testOptionType = TestOptionType.UNDEFINED
         ),
     )
     PiterrusAppTheme {

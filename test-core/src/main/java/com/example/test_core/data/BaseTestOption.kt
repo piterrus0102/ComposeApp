@@ -4,14 +4,12 @@ data class BaseTestOption(
     val name: String,
     val value: Int?,
     val isInvolved: Boolean = false,
-    val optionDisplayName: String,
     val optionMeasurement: OptionMeasurementType,
-    val available: Boolean? = null,
-    val showedInList: Boolean
+    val testOptionType: TestOptionType
 )
 
 enum class OptionMeasurementType {
-    UNDETERMINED,
+    UNDEFINED,
     TIME,
     PERCENT
 }

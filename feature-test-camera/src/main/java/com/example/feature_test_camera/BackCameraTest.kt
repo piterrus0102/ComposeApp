@@ -2,6 +2,7 @@ package com.example.feature_test_camera
 
 import com.example.test_core.data.BaseTestOption
 import com.example.test_core.data.OptionMeasurementType
+import com.example.test_core.data.TestOptionType
 
 class BackCameraTest : ICameraTest() {
 
@@ -10,9 +11,8 @@ class BackCameraTest : ICameraTest() {
             name = "flash",
             value = null,
             isInvolved = true,
-            optionDisplayName = "",
-            optionMeasurement = OptionMeasurementType.UNDETERMINED,
-            showedInList = false
+            optionMeasurement = OptionMeasurementType.UNDEFINED,
+            testOptionType = TestOptionType.CAMERA_FLASH
         )
     )
 

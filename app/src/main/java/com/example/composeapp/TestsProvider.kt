@@ -3,6 +3,7 @@ package com.example.composeapp
 import com.example.feature_test_battery.BatteryLoad
 import com.example.test_core.data.BaseTestOption
 import com.example.test_core.data.OptionMeasurementType
+import com.example.test_core.data.TestOptionType
 import com.example.test_core.model.BaseTest
 
 class TestsProvider {
@@ -15,37 +16,31 @@ class TestsProvider {
                 options = listOf(
                     BaseTestOption(
                         name = "currentChargeLevel",
-                        optionDisplayName = "Current Charge Level",
                         value = 0,
                         optionMeasurement = OptionMeasurementType.PERCENT,
-                        showedInList = true,
-                        isInvolved = true
-
+                        isInvolved = true,
+                        testOptionType = TestOptionType.CURRENT_CHARGE_LEVEL
                     ),
                     BaseTestOption(
                         name = "minChargeLevel",
-                        optionDisplayName = "Min Charge Level",
-                        value = 1,
+                        value = 30,
                         optionMeasurement = OptionMeasurementType.PERCENT,
-                        showedInList = true,
-                        isInvolved = true
-
+                        isInvolved = true,
+                        testOptionType = TestOptionType.MIN_CHARGE_LEVEL
                     ),
                     BaseTestOption(
                         name = "testTime",
-                        optionDisplayName = "Test time",
                         value = 5,
                         optionMeasurement = OptionMeasurementType.TIME,
-                        showedInList = true,
-                        isInvolved = true
+                        isInvolved = true,
+                        testOptionType = TestOptionType.TEST_TIME
                     ),
                     BaseTestOption(
                         name = "dischargeThreshold",
-                        optionDisplayName = "Discharge threshold",
                         value = 1,
                         optionMeasurement = OptionMeasurementType.PERCENT,
-                        showedInList = true,
-                        isInvolved = true
+                        isInvolved = true,
+                        testOptionType = TestOptionType.DISCHARGE_THRESHOLD
                     )
                 )
             )

@@ -2,8 +2,11 @@ package com.example.composeapp.test_screens.battery
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.composeapp.base.UITestOption
+import com.example.composeapp.base.toUITestOption
 import com.example.feature_test_battery.IBatteryTest
 import com.example.feature_test_battery.TimerTicker
+import com.example.test_core.data.TestOptionType
 import com.example.test_core.data.TestResultValue
 import com.example.test_core.data.TestState
 import kotlinx.collections.immutable.ImmutableList
@@ -23,7 +26,18 @@ class BatteryScreenViewModel(private val test: IBatteryTest) : ViewModel() {
 
     init {
         batteryMutableState.value = batteryState.value.copy(
-            options = test.options.toImmutableList(),
+            options = test.options
+                .map {
+                    val optionDisplayName = when(it.testOptionType) {
+                        TestOptionType.CURRENT_CHARGE_LEVEL -> "Current Charge Level"
+                        TestOptionType.MIN_CHARGE_LEVEL -> "Min Charge Level"
+                        TestOptionType.TEST_TIME -> "Test Time"
+                        TestOptionType.DISCHARGE_THRESHOLD -> "Discharge Threshold"
+                        else -> null
+                    }
+                    it.toUITestOption(optionDisplayName = optionDisplayName)
+                }
+                .toImmutableList(),
         )
 
         viewModelScope.launch {
@@ -38,13 +52,13 @@ class BatteryScreenViewModel(private val test: IBatteryTest) : ViewModel() {
         this.batteryLevel = batteryLevel
         test.setEndBatteryLevel(batteryLevel)
         val newOptions = batteryMutableState.value.options.map {
-            when (it.name) {
-                "minChargeLevel" -> {
-                    it.copy(available = batteryLevel >= it.value!!)
+            when (it.testOptionType) {
+                TestOptionType.MIN_CHARGE_LEVEL -> {
+                    it.copy(available = batteryLevel >= it.optionDisplayValue)
                 }
 
-                "currentChargeLevel" -> {
-                    it.copy(value = batteryLevel)
+                TestOptionType.CURRENT_CHARGE_LEVEL -> {
+                    it.copy(optionDisplayValue = batteryLevel)
                 }
 
                 else -> {
@@ -130,7 +144,7 @@ data class BatteryState(
     val batteryLevel: Int = 0,
     val dischargeThreshold: Int = 0,
     val testTime: Int = 0,
-    val options: ImmutableList<com.example.test_core.data.BaseTestOption> = persistentListOf()
+    val options: ImmutableList<UITestOption> = persistentListOf()
 ) {
     val readyForTest =
         chargeState == ChargeState.NotCharging && options.all { it.available != false }
