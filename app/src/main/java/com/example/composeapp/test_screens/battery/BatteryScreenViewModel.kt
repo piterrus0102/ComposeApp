@@ -26,18 +26,19 @@ class BatteryScreenViewModel(private val test: IBatteryTest) : ViewModel() {
 
     init {
         batteryMutableState.value = batteryState.value.copy(
-            options = test.options
-                .map {
-                    val optionDisplayName = when(it.testOptionType) {
-                        TestOptionType.CURRENT_CHARGE_LEVEL -> "Current Charge Level"
-                        TestOptionType.MIN_CHARGE_LEVEL -> "Min Charge Level"
-                        TestOptionType.TEST_TIME -> "Test Time"
-                        TestOptionType.DISCHARGE_THRESHOLD -> "Discharge Threshold"
-                        else -> null
-                    }
-                    it.toUITestOption(optionDisplayName = optionDisplayName)
+            options = test.options.map {
+                val optionDisplayName = when (it.testOptionType) {
+                    TestOptionType.CURRENT_CHARGE_LEVEL -> "Current Charge Level"
+                    TestOptionType.MIN_CHARGE_LEVEL -> "Min Charge Level"
+                    TestOptionType.TEST_TIME -> "Test Time"
+                    TestOptionType.DISCHARGE_THRESHOLD -> "Discharge Threshold"
+                    else -> null
                 }
-                .toImmutableList(),
+                it.toUITestOption(
+                    optionDisplayName = optionDisplayName,
+                    showedInList = it.testOptionType != TestOptionType.ENABLE_VIBRO && it.testOptionType != TestOptionType.ENABLE_3D
+                )
+            }.toImmutableList(),
         )
 
         viewModelScope.launch {
@@ -51,21 +52,24 @@ class BatteryScreenViewModel(private val test: IBatteryTest) : ViewModel() {
     fun updateBatteryIndicators(batteryLevel: Int, isCharging: Boolean) {
         this.batteryLevel = batteryLevel
         test.setEndBatteryLevel(batteryLevel)
-        val newOptions = batteryMutableState.value.options.map {
-            when (it.testOptionType) {
-                TestOptionType.MIN_CHARGE_LEVEL -> {
-                    it.copy(available = batteryLevel >= it.optionDisplayValue)
-                }
+        val newOptions = batteryMutableState.value.options
+            .map {
+                when (it.testOptionType) {
+                    TestOptionType.MIN_CHARGE_LEVEL -> {
+                        it.copy(available = batteryLevel >= it.optionDisplayValue)
+                    }
 
-                TestOptionType.CURRENT_CHARGE_LEVEL -> {
-                    it.copy(optionDisplayValue = batteryLevel)
-                }
+                    TestOptionType.CURRENT_CHARGE_LEVEL -> {
+                        it.copy(optionDisplayValue = batteryLevel)
+                    }
 
-                else -> {
-                    it
+                    else -> {
+                        it
+                    }
                 }
             }
-        }.filter { it.showedInList }.toImmutableList()
+            .filter { it.showedInList }
+            .toImmutableList()
         batteryMutableState.value = batteryState.value.copy(
             batteryLevel = batteryLevel,
             chargeState = if (isCharging) ChargeState.Charging else ChargeState.NotCharging,
@@ -107,7 +111,6 @@ class BatteryScreenViewModel(private val test: IBatteryTest) : ViewModel() {
                                 )
                             )
                         }
-
                     }
                     test.execute()
                 } else {
@@ -147,14 +150,14 @@ data class BatteryState(
     val options: ImmutableList<UITestOption> = persistentListOf()
 ) {
     val readyForTest =
-        chargeState == ChargeState.NotCharging && options.all { it.available != false }
+        chargeState == ChargeState.NotCharging && options.all { it.available == true }
 }
 
 sealed class BatteryScreenState {
     data object NotExecuting : BatteryScreenState()
     data class Executing(
-        val timeToCompletionInSeconds: Int,
-        val enabledVibro: Boolean,
-        val enabled3D: Boolean
+        val timeToCompletionInSeconds: Int = 0,
+        val enabledVibro: Boolean = false,
+        val enabled3D: Boolean = false
     ) : BatteryScreenState()
 }

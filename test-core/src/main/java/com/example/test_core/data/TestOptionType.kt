@@ -6,5 +6,7 @@ enum class TestOptionType {
     MIN_CHARGE_LEVEL,
     TEST_TIME,
     DISCHARGE_THRESHOLD,
+    ENABLE_VIBRO,
+    ENABLE_3D,
     CAMERA_FLASH
 }

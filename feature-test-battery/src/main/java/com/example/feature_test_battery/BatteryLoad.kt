@@ -3,6 +3,7 @@ package com.example.feature_test_battery
 import android.os.CountDownTimer
 import android.os.Looper
 import com.example.test_core.data.BaseTestOption
+import com.example.test_core.data.TestOptionType
 import com.example.test_core.data.TestResultValue
 import com.example.test_core.data.TestState
 import java.io.File
@@ -23,8 +24,8 @@ class BatteryLoad(
         val minStartLevel: Int = 30,
         val testTime: Int = 60,
         val dischargeThreshold: Int = 5,
-        val enableVibro: Boolean = true,
-        val enable3d: Boolean = true,
+        val enableVibro: Boolean = false,
+        val enable3d: Boolean = false,
         val endBatteryLevel: Int = 0,
     )
 
@@ -37,11 +38,17 @@ class BatteryLoad(
 
     init {
         options.forEach {
-            if (it.name == "testTime") {
+            if (it.testOptionType == TestOptionType.TEST_TIME) {
                 testOptions = testOptions.copy(testTime = it.value!!)
             }
-            if (it.name == "dischargeThreshold") {
+            if (it.testOptionType == TestOptionType.DISCHARGE_THRESHOLD) {
                 testOptions = testOptions.copy(dischargeThreshold = it.value!!)
+            }
+            if (it.testOptionType == TestOptionType.ENABLE_3D) {
+                testOptions = testOptions.copy(enable3d = true)
+            }
+            if (it.testOptionType == TestOptionType.ENABLE_VIBRO) {
+                testOptions = testOptions.copy(enableVibro = true)
             }
         }
     }

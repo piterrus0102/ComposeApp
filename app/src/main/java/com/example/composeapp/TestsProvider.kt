@@ -23,7 +23,7 @@ class TestsProvider {
                     ),
                     BaseTestOption(
                         name = "minChargeLevel",
-                        value = 30,
+                        value = 20,
                         optionMeasurement = OptionMeasurementType.PERCENT,
                         isInvolved = true,
                         testOptionType = TestOptionType.MIN_CHARGE_LEVEL
@@ -41,6 +41,20 @@ class TestsProvider {
                         optionMeasurement = OptionMeasurementType.PERCENT,
                         isInvolved = true,
                         testOptionType = TestOptionType.DISCHARGE_THRESHOLD
+                    ),
+                    BaseTestOption(
+                        name = "enableVibro",
+                        isInvolved = true,
+                        testOptionType = TestOptionType.ENABLE_VIBRO,
+                        value = null,
+                        optionMeasurement = OptionMeasurementType.UNDEFINED
+                    ),
+                    BaseTestOption(
+                        name = "enable3D",
+                        isInvolved = true,
+                        testOptionType = TestOptionType.ENABLE_3D,
+                        value = null,
+                        optionMeasurement = OptionMeasurementType.UNDEFINED
                     )
                 )
             )
